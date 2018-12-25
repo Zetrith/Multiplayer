@@ -128,7 +128,7 @@ namespace Multiplayer.Client
             {
                 LongEventHandler.QueueLongEvent(() =>
                 {
-                    Multiplayer.LoadInMainThread(LoadPatch.gameToLoad);
+                    SaveLoad.LoadInMainThread(LoadPatch.gameToLoad);
                     PostLoad();
                 }, "MpLoading", false, null);
             }
@@ -142,11 +142,14 @@ namespace Multiplayer.Client
             OnMainThread.cachedAtTime = TickPatch.Timer;
             Multiplayer.session.replayTimerStart = TickPatch.Timer;
 
-            FactionWorldData factionData = Multiplayer.WorldComp.factionData.GetValueSafe(Multiplayer.session.myFactionId);
+            var factionData = Multiplayer.WorldComp.factionData.GetValueSafe(Multiplayer.session.myFactionId);
             if (factionData != null && factionData.online)
                 Multiplayer.RealPlayerFaction = Find.FactionManager.GetById(factionData.factionId);
             else
                 Multiplayer.RealPlayerFaction = Multiplayer.DummyFaction;
+
+            // todo find a better way
+            Multiplayer.game.myFactionLoading = null;
 
             Multiplayer.WorldComp.cmds = new Queue<ScheduledCommand>(OnMainThread.cachedMapCmds.GetValueSafe(ScheduledCommand.Global) ?? new List<ScheduledCommand>());
             // Map cmds are added in MapAsyncTimeComp.FinalizeInit

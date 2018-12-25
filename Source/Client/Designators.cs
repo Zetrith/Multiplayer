@@ -103,6 +103,9 @@ namespace Multiplayer.Client
 
             if (designator is Designator_Install)
                 Sync.WriteSync(data, ThingToInstall());
+
+            if (designator is Designator_Zone)
+                Sync.WriteSync(data, Find.Selector.SelectedZone);
         }
 
         private static Thing ThingToInstall()

@@ -29,6 +29,7 @@ namespace Multiplayer.Client
 
         public static TimeSpeed replayTimeSpeed;
 
+        public static bool disableSkipCancel;
         public static bool skipToTickUntil;
         public static int skipTo = -1;
         public static Action afterSkip;
@@ -89,6 +90,7 @@ namespace Multiplayer.Client
             skipToTickUntil = false;
             accumulator = 0;
             afterSkip = null;
+            disableSkipCancel = false;
         }
 
         static ITickable CurrentTickable()
@@ -371,7 +373,7 @@ namespace Multiplayer.Client
         {
             if (Multiplayer.Client == null) return true;
 
-            MapAsyncTimeComp comp = t.Map.GetComponent<MapAsyncTimeComp>();
+            MapAsyncTimeComp comp = t.Map.AsyncTime();
             TickerType tickerType = t.def.tickerType;
 
             if (tickerType == TickerType.Normal)
@@ -392,7 +394,7 @@ namespace Multiplayer.Client
         {
             if (Multiplayer.Client == null) return true;
 
-            MapAsyncTimeComp comp = t.Map.GetComponent<MapAsyncTimeComp>();
+            MapAsyncTimeComp comp = t.Map.AsyncTime();
             TickerType tickerType = t.def.tickerType;
 
             if (tickerType == TickerType.Normal)
@@ -628,7 +630,7 @@ namespace Multiplayer.Client
         }
     }
 
-    public class MapAsyncTimeComp : MapComponent, ITickable
+    public class MapAsyncTimeComp : IExposable, ITickable
     {
         public static Map tickingMap;
         public static Map executingCmdMap;
@@ -643,7 +645,7 @@ namespace Multiplayer.Client
         public float TickRateMultiplier(TimeSpeed speed)
         {
             var comp = map.MpComp();
-            if (comp.caravanForming != null || comp.mapDialogs.Any() || Multiplayer.WorldComp.trading.Any(t => t.playerNegotiator.Map == map))
+            if (comp.transporterLoading != null || comp.caravanForming != null || comp.mapDialogs.Any() || Multiplayer.WorldComp.trading.Any(t => t.playerNegotiator.Map == map))
                 return 0f;
 
             if (mapTicks < slower.forceNormalSpeedUntil)
@@ -680,6 +682,7 @@ namespace Multiplayer.Client
 
         public Queue<ScheduledCommand> Cmds { get => cmds; }
 
+        public Map map;
         public int mapTicks;
         private TimeSpeed timeSpeedInt;
         public bool forcedNormalSpeed;
@@ -696,8 +699,9 @@ namespace Multiplayer.Client
 
         public Queue<ScheduledCommand> cmds = new Queue<ScheduledCommand>();
 
-        public MapAsyncTimeComp(Map map) : base(map)
+        public MapAsyncTimeComp(Map map)
         {
+            this.map = map;
         }
 
         public void Tick()
@@ -767,14 +771,14 @@ namespace Multiplayer.Client
             map.glowGrid.GlowGridUpdate_First();
         }
 
-        private PrevTime? prevTime;
+        private TimeSnapshot? prevTime;
         private Storyteller prevStoryteller;
 
         public void PreContext()
         {
             //map.PushFaction(map.ParentFaction);
 
-            prevTime = PrevTime.GetAndSetToMap(map);
+            prevTime = TimeSnapshot.GetAndSetFromMap(map);
 
             prevStoryteller = Current.Game.storyteller;
             Current.Game.storyteller = storyteller;
@@ -803,7 +807,7 @@ namespace Multiplayer.Client
             //map.PopFaction();
         }
 
-        public override void ExposeData()
+        public void ExposeData()
         {
             Scribe_Values.Look(ref mapTicks, "mapTicks");
             Scribe_Deep.Look(ref storyteller, "storyteller");
@@ -815,10 +819,10 @@ namespace Multiplayer.Client
                 ulong.TryParse(randStateStr, out randState);
         }
 
-        public override void FinalizeInit()
+        public void FinalizeInit()
         {
             cmds = new Queue<ScheduledCommand>(OnMainThread.cachedMapCmds.GetValueSafe(map.uniqueID) ?? new List<ScheduledCommand>());
-            Log.Message("init map with cmds " + cmds.Count);
+            Log.Message($"Init map with cmds {cmds.Count}");
         }
 
         public void ExecuteCmd(ScheduledCommand cmd)
@@ -842,7 +846,9 @@ namespace Multiplayer.Client
             List<object> prevSelected = Find.Selector.selected;
             Find.Selector.selected = new List<object>();
 
-            bool devMode = Prefs.data.devMode;
+            SelectorDeselectPatch.deselected = new List<object>();
+
+            bool prevDevMode = Prefs.data.devMode;
             Prefs.data.devMode = MpVersion.IsDebug;
 
             try
@@ -902,7 +908,11 @@ namespace Multiplayer.Client
             }
             finally
             {
-                Prefs.data.devMode = devMode;
+                Prefs.data.devMode = prevDevMode;
+
+                foreach (var deselected in SelectorDeselectPatch.deselected)
+                    prevSelected.Remove(deselected);
+                SelectorDeselectPatch.deselected = null;
 
                 Find.Selector.selected = prevSelected;
 
@@ -930,7 +940,7 @@ namespace Multiplayer.Client
             }
             else
             {
-                Current.Game.CurrentMap = map;
+                Current.Game.currentMapIndex = (sbyte)map.Index;
             }
         }
 
@@ -980,23 +990,23 @@ namespace Multiplayer.Client
                 if (mode == DesignatorMode.SingleCell)
                 {
                     IntVec3 cell = Sync.ReadSync<IntVec3>(data);
+
                     designator.DesignateSingleCell(cell);
                     designator.Finalize(true);
                 }
                 else if (mode == DesignatorMode.MultiCell)
                 {
                     IntVec3[] cells = Sync.ReadSync<IntVec3[]>(data);
+
                     designator.DesignateMultiCell(cells);
                 }
                 else if (mode == DesignatorMode.Thing)
                 {
                     Thing thing = Sync.ReadSync<Thing>(data);
+                    if (thing == null) return;
 
-                    if (thing != null)
-                    {
-                        designator.DesignateThing(thing);
-                        designator.Finalize(true);
-                    }
+                    designator.DesignateThing(thing);
+                    designator.Finalize(true);
                 }
             }
             finally
@@ -1031,6 +1041,13 @@ namespace Multiplayer.Client
                 Thing thing = Sync.ReadSync<Thing>(data);
                 if (thing == null) return false;
                 DesignatorInstallPatch.thingToInstall = thing;
+            }
+
+            if (designator is Designator_Zone)
+            {
+                Zone zone = Sync.ReadSync<Zone>(data);
+                if (zone != null)
+                    Find.Selector.selected.Add(zone);
             }
 
             return true;

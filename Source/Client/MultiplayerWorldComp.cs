@@ -13,7 +13,7 @@ using Verse.AI;
 
 namespace Multiplayer.Client
 {
-    public class MultiplayerWorldComp : WorldComponent, ITickable
+    public class MultiplayerWorldComp : IExposable, ITickable
     {
         public static bool tickingWorld;
         public static bool executingCmdWorld;
@@ -56,6 +56,7 @@ namespace Multiplayer.Client
 
         public Dictionary<int, FactionWorldData> factionData = new Dictionary<int, FactionWorldData>();
 
+        public World world;
         public ConstantTicker ticker = new ConstantTicker();
         public IdBlock globalIdBlock;
         public ulong randState = 2;
@@ -64,11 +65,12 @@ namespace Multiplayer.Client
 
         public Queue<ScheduledCommand> cmds = new Queue<ScheduledCommand>();
 
-        public MultiplayerWorldComp(World world) : base(world)
+        public MultiplayerWorldComp(World world)
         {
+            this.world = world;
         }
 
-        public override void ExposeData()
+        public void ExposeData()
         {
             Scribe_Values.Look(ref TickPatch.Timer, "timer");
 
@@ -115,6 +117,11 @@ namespace Multiplayer.Client
                 Scribe_Collections.Look(ref factionData, "factionData", LookMode.Value, LookMode.Deep);
                 if (factionData == null)
                     factionData = new Dictionary<int, FactionWorldData>();
+            }
+
+            if (Scribe.mode == LoadSaveMode.LoadingVars && Multiplayer.session != null && Multiplayer.game != null)
+            {
+                Multiplayer.game.myFactionLoading = Find.FactionManager.GetById(Multiplayer.session.myFactionId);
             }
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -262,11 +269,11 @@ namespace Multiplayer.Client
                             }
                         }
 
-                        XmlDocument doc = Multiplayer.SaveAndReload();
-                        Multiplayer.CacheGameData(doc);
+                        XmlDocument doc = SaveLoad.SaveAndReload();
+                        SaveLoad.CacheGameData(doc);
 
                         if (TickPatch.skipTo < 0 && !Multiplayer.IsReplay && (Multiplayer.LocalServer != null || Multiplayer.arbiterInstance))
-                            Multiplayer.SendCurrentGameData(true);
+                            SaveLoad.SendCurrentGameData(true);
                     }, "MpSaving", false, null);
                 }
             }

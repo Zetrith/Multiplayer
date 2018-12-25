@@ -2,6 +2,7 @@
 using Multiplayer.Common;
 using Steamworks;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -97,73 +98,6 @@ namespace Multiplayer.Client
                 return Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(i => i.AddressFamily == AddressFamily.InterNetwork).ToString();
             }
         }
-
-        public static void CleanSteamNet(int channel)
-        {
-            while (SteamNetworking.IsP2PPacketAvailable(out uint size, channel))
-                SteamNetworking.ReadP2PPacket(new byte[size], size, out uint sizeRead, out CSteamID remote, channel);
-        }
-
-        public static IEnumerable<SteamPacket> ReadSteamPackets()
-        {
-            while (SteamNetworking.IsP2PPacketAvailable(out uint size, 0))
-            {
-                byte[] data = new byte[size];
-                SteamNetworking.ReadP2PPacket(data, size, out uint sizeRead, out CSteamID remote, 0);
-
-                if (data.Length <= 0) continue;
-
-                var reader = new ByteReader(data);
-                byte info = reader.ReadByte();
-                bool joinPacket = (info & 1) > 0;
-                bool reliable = (info & 2) > 0;
-
-                yield return new SteamPacket() { remote = remote, data = reader, joinPacket = joinPacket, reliable = reliable };
-            }
-        }
-    }
-
-    public struct SteamPacket
-    {
-        public CSteamID remote;
-        public ByteReader data;
-        public bool joinPacket;
-        public bool reliable;
-    }
-
-    public static class SteamImages
-    {
-        public static Dictionary<int, Texture2D> cache = new Dictionary<int, Texture2D>();
-
-        // Remember to flip it
-        public static Texture2D GetTexture(int id)
-        {
-            if (cache.TryGetValue(id, out Texture2D tex))
-                return tex;
-
-            if (!SteamUtils.GetImageSize(id, out uint width, out uint height))
-            {
-                cache[id] = null;
-                return null;
-            }
-
-            uint sizeInBytes = width * height * 4;
-            byte[] data = new byte[sizeInBytes];
-
-            if (!SteamUtils.GetImageRGBA(id, data, (int)sizeInBytes))
-            {
-                cache[id] = null;
-                return null;
-            }
-
-            tex = new Texture2D((int)width, (int)height, TextureFormat.RGBA32, false);
-            tex.LoadRawTextureData(data);
-            tex.Apply();
-
-            cache[id] = tex;
-
-            return tex;
-        }
     }
 
     [AttributeUsage(AttributeTargets.Class)]
@@ -184,6 +118,90 @@ namespace Multiplayer.Client
         public static implicit operator Container<T>(T value)
         {
             return new Container<T>(value);
+        }
+    }
+
+    public class OrderedDict<K, V> : IEnumerable
+    {
+        private List<K> list = new List<K>();
+        private Dictionary<K, V> dict = new Dictionary<K, V>();
+
+        public K this[int index]
+        {
+            get => list[index];
+        }
+
+        public V this[K key]
+        {
+            get => dict[key];
+        }
+
+        public void Add(K key, V value)
+        {
+            dict.Add(key, value);
+            list.Add(key);
+        }
+
+        public void Insert(int index, K key, V value)
+        {
+            dict.Add(key, value);
+            list.Insert(index, key);
+        }
+
+        public bool TryGetValue(K key, out V value)
+        {
+            value = default(V);
+            return dict.TryGetValue(key, out value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return dict.GetEnumerator();
+        }
+    }
+
+    public class UniqueList<T> : IEnumerable<T>
+    {
+        private List<T> list = new List<T>();
+        private HashSet<T> set = new HashSet<T>();
+
+        public int Count => list.Count;
+        public T this[int index] => list[index];
+
+        public bool Add(T t)
+        {
+            if (set.Add(t))
+            {
+                list.Add(t);
+                return true;
+            }
+
+            return false;
+        }
+
+        public T[] ToArray()
+        {
+            return list.ToArray();
+        }
+
+        public bool Contains(T t)
+        {
+            return set.Contains(t);
+        }
+
+        public int IndexOf(T t)
+        {
+            return list.IndexOf(t);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return list.GetEnumerator();
         }
     }
 

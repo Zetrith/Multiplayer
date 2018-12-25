@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -31,6 +32,7 @@ namespace Multiplayer.Client
             { data => data.ReadDouble() },
             { data => data.ReadBool() },
             { data => data.ReadString() },
+            { data => (Event)null },
             { data => ReadSync<Pawn>(data)?.mindState?.priorityWork },
             { data => ReadSync<Pawn>(data)?.playerSettings },
             { data => ReadSync<Pawn>(data)?.timetable },
@@ -50,6 +52,7 @@ namespace Multiplayer.Client
             { data => new Rot4(data.ReadByte()) },
             { data => new ITab_Bills() },
             { data => new ITab_Pawn_Gear() },
+            { data => new ITab_TransporterContents() },
             { data => Current.Game.outfitDatabase },
             { data => Current.Game.drugPolicyDatabase },
             { data => Current.Game.foodRestrictionDatabase },
@@ -81,6 +84,14 @@ namespace Multiplayer.Client
             {
                 data =>
                 {
+                    int id = data.ReadInt32();
+                    var session = data.MpContext().map.MpComp().transporterLoading;
+                    return session?.sessionId == id ? session : null;
+                }
+            },
+            {
+                data =>
+                {
                     bool hasThing = data.ReadBool();
                     if (hasThing)
                         return new LocalTargetInfo(ReadSync<Thing>(data));
@@ -104,6 +115,7 @@ namespace Multiplayer.Client
             { (ByteWriter data, double d) => data.WriteDouble(d) },
             { (ByteWriter data, bool b) => data.WriteBool(b) },
             { (ByteWriter data, string s) => data.WriteString(s) },
+            { (ByteWriter data, Event e) => { } },
             { (ByteWriter data, PriorityWork work) => WriteSync(data, work.pawn) },
             { (ByteWriter data, Pawn_PlayerSettings comp) => WriteSync(data, comp.pawn) },
             { (ByteWriter data, Pawn_TimetableTracker comp) => WriteSync(data, comp.pawn) },
@@ -123,6 +135,7 @@ namespace Multiplayer.Client
             { (ByteWriter data, Rot4 rot) => data.WriteByte(rot.AsByte) },
             { (ByteWriter data, ITab_Bills tab) => {} },
             { (ByteWriter data, ITab_Pawn_Gear tab) => {} },
+            { (ByteWriter data, ITab_TransporterContents tab) => {} },
             { (ByteWriter data, OutfitDatabase db) => {} },
             { (ByteWriter data, DrugPolicyDatabase db) => {} },
             { (ByteWriter data, FoodRestrictionDatabase db) => {} },
@@ -132,6 +145,7 @@ namespace Multiplayer.Client
             { (ByteWriter data, PersistentDialog session) => { data.MpContext().map = session.map; data.WriteInt32(session.id); } },
             { (ByteWriter data, MpTradeSession session) => data.WriteInt32(session.sessionId) },
             { (ByteWriter data, CaravanFormingSession session) => { data.MpContext().map = session.map; data.WriteInt32(session.sessionId); } },
+            { (ByteWriter data, TransporterLoading session) => { data.MpContext().map = session.map; data.WriteInt32(session.sessionId); } },
             {
                 (ByteWriter data, LocalTargetInfo info) =>
                 {
@@ -171,6 +185,7 @@ namespace Multiplayer.Client
         {
             typeof(Map),
             typeof(Thing),
+            typeof(ThingComp),
             typeof(WorldObject),
             typeof(WorldObjectComp)
         };
@@ -196,10 +211,11 @@ namespace Multiplayer.Client
 
         private static T GetDefById<T>(ushort id) where T : Def, new() => DefDatabase<T>.GetByShortHash(id);
 
-        public static object ReadSyncObject(ByteReader data, Type type)
+        public static object ReadSyncObject(ByteReader data, SyncType syncType)
         {
             MpContext context = data.MpContext();
             Map map = context.map;
+            Type type = syncType.type;
 
             try
             {
@@ -210,6 +226,14 @@ namespace Multiplayer.Client
                 else if (type.IsByRef)
                 {
                     return null;
+                }
+                else if (syncType.expose)
+                {
+                    if (!typeof(IExposable).IsAssignableFrom(type))
+                        throw new SerializationException($"Type {type} can't be exposed because it isn't IExposable");
+
+                    byte[] exposableData = data.ReadPrefixedBytes();
+                    return ReadExposable.MakeGenericMethod(type).Invoke(null, new[] { exposableData, null });
                 }
                 else if (typeof(IntVec3) == type)
                 {
@@ -258,6 +282,11 @@ namespace Multiplayer.Client
 
                         return list;
                     }
+                    else if (type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+                    {
+                        Type element = type.GetGenericArguments()[0];
+                        return ReadSyncObject(data, typeof(List<>).MakeGenericType(element));
+                    }
                     else if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
                     {
                         bool isNull = data.ReadBool();
@@ -269,16 +298,6 @@ namespace Multiplayer.Client
                         Type nullableType = type.GetGenericArguments()[0];
                         return Activator.CreateInstance(type, ReadSyncObject(data, nullableType));
                     }
-                    else if (type.GetGenericTypeDefinition() == typeof(Expose<>))
-                    {
-                        Type exposableType = type.GetGenericArguments()[0];
-                        byte[] exposableData = data.ReadPrefixedBytes();
-                        return ReadExposable.MakeGenericMethod(exposableType).Invoke(null, new[] { exposableData, null });
-                    }
-                }
-                else if (typeof(ThinkNode).IsAssignableFrom(type))
-                {
-                    return null;
                 }
                 else if (typeof(Area).IsAssignableFrom(type))
                 {
@@ -348,9 +367,25 @@ namespace Multiplayer.Client
                 else if (typeof(Command_SetTargetFuelLevel) == type)
                 {
                     List<CompRefuelable> refuelables = ReadSync<List<CompRefuelable>>(data);
+                    refuelables.RemoveAll(r => r == null);
 
                     Command_SetTargetFuelLevel command = new Command_SetTargetFuelLevel();
                     command.refuelables = refuelables;
+
+                    return command;
+                }
+                else if (typeof(Command_LoadToTransporter) == type)
+                {
+                    CompTransporter transporter = ReadSync<CompTransporter>(data);
+                    if (transporter == null)
+                        return null;
+
+                    List<CompTransporter> transporters = ReadSync<List<CompTransporter>>(data);
+                    transporters.RemoveAll(r => r == null);
+
+                    Command_LoadToTransporter command = new Command_LoadToTransporter();
+                    command.transComp = transporter;
+                    command.transporters = transporters;
 
                     return command;
                 }
@@ -534,6 +569,10 @@ namespace Multiplayer.Client
                 {
                     return ReadWithImpl<IPlantToGrowSettable>(data, plantToGrowSettables);
                 }
+                else if (typeof(IThingHolder) == type)
+                {
+                    return ReadWithImpl<IThingHolder>(data, supportedThingHolders);
+                }
                 else if (typeof(StorageSettings) == type)
                 {
                     IStoreSettingsParent parent = ReadSync<IStoreSettingsParent>(data);
@@ -550,6 +589,11 @@ namespace Multiplayer.Client
             }
         }
 
+        public static object[] ReadSyncObjects(ByteReader data, IEnumerable<SyncType> spec)
+        {
+            return spec.Select(type => ReadSyncObject(data, type)).ToArray();
+        }
+
         public static object[] ReadSyncObjects(ByteReader data, IEnumerable<Type> spec)
         {
             return spec.Select(type => ReadSyncObject(data, type)).ToArray();
@@ -560,12 +604,16 @@ namespace Multiplayer.Client
             WriteSyncObject(data, obj, typeof(T));
         }
 
-        public static void WriteSyncObject(ByteWriter data, object obj, Type type)
+        public static void WriteSyncObject(ByteWriter data, object obj, SyncType syncType)
         {
             MpContext context = data.MpContext();
+            Type type = syncType.type;
 
             LoggingByteWriter log = data as LoggingByteWriter;
             log?.LogEnter(type.FullName + ": " + (obj ?? "null"));
+
+            if (obj != null && !type.IsAssignableFrom(obj.GetType()))
+                throw new SerializationException($"Serializing with type {type} but got object of type {obj.GetType()}");
 
             try
             {
@@ -574,6 +622,14 @@ namespace Multiplayer.Client
                 }
                 else if (type.IsByRef)
                 {
+                }
+                else if (syncType.expose)
+                {
+                    if (!typeof(IExposable).IsAssignableFrom(type))
+                        throw new SerializationException($"Type {type} can't be exposed because it isn't IExposable");
+
+                    IExposable exposable = obj as IExposable;
+                    data.WritePrefixedBytes(ScribeUtil.WriteExposable(exposable));
                 }
                 else if (typeof(IntVec3) == type)
                 {
@@ -654,18 +710,21 @@ namespace Multiplayer.Client
                     if (hasValue)
                         WriteSyncObject(data, obj.GetPropertyOrField("Value"), nullableType);
                 }
-                else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Expose<>))
+                else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                 {
-                    Type exposableType = type.GetGenericArguments()[0];
-                    if (!exposableType.IsAssignableFrom(obj.GetType()))
-                        throw new SerializationException($"Expose<> types {obj.GetType()} and {exposableType} don't match");
+                    IEnumerable e = (IEnumerable)obj;
+                    Type elementType = type.GetGenericArguments()[0];
+                    var listType = typeof(List<>).MakeGenericType(elementType);
+                    IList list = (IList)Activator.CreateInstance(listType);
 
-                    IExposable exposable = obj as IExposable;
-                    data.WritePrefixedBytes(ScribeUtil.WriteExposable(exposable));
-                }
-                else if (typeof(ThinkNode).IsAssignableFrom(type))
-                {
-                    // todo implement?
+                    foreach (var o in e)
+                    {
+                        if (list.Count > ushort.MaxValue)
+                            throw new Exception($"Tried to serialize a {type} with too many ({list.Count}) items.");
+                        list.Add(o);
+                    }
+
+                    WriteSyncObject(data, list, listType);
                 }
                 else if (typeof(Area).IsAssignableFrom(type))
                 {
@@ -710,14 +769,20 @@ namespace Multiplayer.Client
                 }
                 else if (typeof(Command_SetPlantToGrow) == type)
                 {
-                    Command_SetPlantToGrow command = (Command_SetPlantToGrow)obj;
+                    var command = (Command_SetPlantToGrow)obj;
                     WriteSync(data, command.settable);
                     WriteSync(data, command.settables);
                 }
                 else if (typeof(Command_SetTargetFuelLevel) == type)
                 {
-                    Command_SetTargetFuelLevel command = (Command_SetTargetFuelLevel)obj;
+                    var command = (Command_SetTargetFuelLevel)obj;
                     WriteSync(data, command.refuelables);
+                }
+                else if (typeof(Command_LoadToTransporter) == type)
+                {
+                    var command = (Command_LoadToTransporter)obj;
+                    WriteSync(data, command.transComp);
+                    WriteSync(data, command.transporters ?? new List<CompTransporter>());
                 }
                 else if (typeof(Designator).IsAssignableFrom(type))
                 {
@@ -788,6 +853,8 @@ namespace Multiplayer.Client
 
                         if (thing.Spawned)
                             holder = thing.Map;
+                        else if (thing.ParentHolder is ThingComp thingComp)
+                            holder = thingComp;
                         else if (ThingOwnerUtility.GetFirstSpawnedParentThing(thing) is Thing parentThing)
                             holder = parentThing;
                         else if (GetAnyParent<WorldObject>(thing) is WorldObject worldObj)
@@ -934,6 +1001,10 @@ namespace Multiplayer.Client
                 {
                     WriteWithImpl<IPlantToGrowSettable>(data, obj, plantToGrowSettables);
                 }
+                else if (typeof(IThingHolder) == type)
+                {
+                    WriteWithImpl<IThingHolder>(data, obj, supportedThingHolders);
+                }
                 else if (typeof(StorageSettings) == type)
                 {
                     StorageSettings storage = obj as StorageSettings;
@@ -1029,8 +1100,14 @@ namespace Multiplayer.Client
             foreach (var s in Multiplayer.WorldComp.trading)
                 yield return s;
 
-            if (map != null && map.MpComp().caravanForming != null)
-                yield return map.MpComp().caravanForming;
+            if (map == null) yield break;
+            var mapComp = map.MpComp();
+
+            if (mapComp.caravanForming != null)
+                yield return mapComp.caravanForming;
+
+            if (mapComp.transporterLoading != null)
+                yield return mapComp.transporterLoading;
         }
     }
 
@@ -1049,4 +1126,12 @@ namespace Multiplayer.Client
             Add(typeof(T), (data, o) => writer(data, (T)o));
         }
     }
+
+    public class SerializationException : Exception
+    {
+        public SerializationException(string msg) : base(msg)
+        {
+        }
+    }
+
 }

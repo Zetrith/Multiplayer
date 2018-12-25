@@ -11,21 +11,25 @@ using Verse;
 
 namespace Multiplayer.Client
 {
-    public class MultiplayerMapComp : MapComponent
+    public class MultiplayerMapComp : IExposable
     {
         public static bool tickingFactions;
+
+        public Map map;
 
         //public IdBlock mapIdBlock;
         public Dictionary<int, FactionMapData> factionMapData = new Dictionary<int, FactionMapData>();
 
         public CaravanFormingSession caravanForming;
+        public TransporterLoading transporterLoading;
         public List<PersistentDialog> mapDialogs = new List<PersistentDialog>();
 
         // for SaveCompression
         public List<Thing> tempLoadedThings;
 
-        public MultiplayerMapComp(Map map) : base(map)
+        public MultiplayerMapComp(Map map)
         {
+            this.map = map;
         }
 
         public void CreateCaravanFormingSession(bool reform, Action onClosed, bool mapAboutToBeRemoved)
@@ -34,7 +38,13 @@ namespace Multiplayer.Client
             caravanForming = new CaravanFormingSession(map, reform, onClosed, mapAboutToBeRemoved);
         }
 
-        public override void MapComponentTick()
+        public void CreateTransporterLoadingSession(List<CompTransporter> transporters)
+        {
+            if (transporterLoading != null) return;
+            transporterLoading = new TransporterLoading(map, transporters);
+        }
+
+        public void DoTick()
         {
             if (Multiplayer.Client == null) return;
 
@@ -65,7 +75,7 @@ namespace Multiplayer.Client
             map.listerFilthInHomeArea = data.listerFilthInHomeArea;
         }
 
-        public override void ExposeData()
+        public void ExposeData()
         {
             // Data marker
             if (Scribe.mode == LoadSaveMode.Saving)
@@ -75,6 +85,7 @@ namespace Multiplayer.Client
             }
 
             Scribe_Deep.Look(ref caravanForming, "caravanFormingSession", map);
+            Scribe_Deep.Look(ref transporterLoading, "transporterLoading", map);
 
             Scribe_Collections.Look(ref mapDialogs, "mapDialogs", LookMode.Deep, map);
             if (Scribe.mode == LoadSaveMode.LoadingVars && mapDialogs == null)
@@ -202,6 +213,11 @@ namespace Multiplayer.Client
             {
                 if (!Find.WindowStack.IsOpen(typeof(MpFormingCaravanWindow)))
                     comp.caravanForming.OpenWindow(false);
+            }
+            else if (comp.transporterLoading != null)
+            {
+                if (!Find.WindowStack.IsOpen(typeof(MpLoadTransportersWindow)))
+                    comp.transporterLoading.OpenWindow(false);
             }
             else if (Multiplayer.WorldComp.trading.FirstOrDefault(t => t.playerNegotiator.Map == comp.map) is MpTradeSession trading)
             {

@@ -35,7 +35,12 @@ namespace Multiplayer.Client
             menu.DebugAction("Save game for everyone", SaveGameCmd);
             menu.DebugAction("Advance time", AdvanceTime);
 
-            DoIncidentDebugAction(menu, (Find.WorldSelector.SingleSelectedObject as IIncidentTarget) ?? Find.CurrentMap);
+            if (Find.CurrentMap != null)
+                DoIncidentDebugAction(menu, Find.CurrentMap);
+
+            if (Find.WorldSelector.SingleSelectedObject is IIncidentTarget target)
+                DoIncidentDebugAction(menu, target);
+
             DoIncidentDebugAction(menu, Find.World);
         }
 
@@ -68,7 +73,7 @@ namespace Multiplayer.Client
                             parms = storytellerComp.GenerateParms(localDef.category, parms.target);
                         }
 
-                        ExecuteIncident(localDef, parms);
+                        ExecuteIncident(localDef, parms, target as Map);
                     }));
                 }
 
@@ -76,9 +81,9 @@ namespace Multiplayer.Client
             });
         }
 
-        [SyncMethod(args: new[] { typeof(IncidentDef), typeof(Expose<IncidentParms>) })]
+        [SyncMethod]
         [SyncDebugOnly]
-        private static void ExecuteIncident(IncidentDef def, IncidentParms parms)
+        private static void ExecuteIncident(IncidentDef def, [SyncExpose] IncidentParms parms, [SyncContextMap] Map map)
         {
             def.Worker.TryExecute(parms);
         }
