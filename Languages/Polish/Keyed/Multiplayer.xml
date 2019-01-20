@@ -11,7 +11,7 @@
   <MpInvalidGameName>Nieprawidłowa nazwa gry</MpInvalidGameName>
   
   <MpWrongProtocol>Zła wersja protokołu</MpWrongProtocol>
-  <MpWrongMultiplayerVersionInfo>Posiadasz inną wersję Multiplayer niż serwer</MpWrongMultiplayerVersionInfo>
+  <MpWrongMultiplayerVersionInfo>Serwer jest hostowany na Multiplayer {0} (protokół {1}).</MpWrongMultiplayerVersionInfo>
   
   <MpWrongDefs>Niezgodność definicji modów</MpWrongDefs>
   <MpWrongDefsInfo>Upewnij się że masz zaistalowane mody, z taką samą wersją i kolejnością jak serwer</MpWrongDefsInfo>
