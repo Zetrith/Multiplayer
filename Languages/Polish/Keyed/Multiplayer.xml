@@ -76,7 +76,7 @@
   <MpForceCatchUp>Kliknij aby wymusić synchronizacje</MpForceCatchUp>
   
   <MpDesynced>Wykryto desynchronizacje</MpDesynced>
-  <MpTryResync>Spróbuj zsynchronizować</MpTryResync>
+  <MpTryResync>Synchronizuj</MpTryResync>
   
   <MpSaveReplayAs>Zapisz powtórkę</MpSaveReplayAs>
   <MpWillOverwrite>Zostanie nadpisany poprzedni plik</MpWillOverwrite>
