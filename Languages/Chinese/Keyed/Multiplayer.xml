@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <MpSimulating>模拟中</MpSimulating>
+  <MpSimulatingServer>服务器在模拟中</MpSimulatingServer>
+  <MpLoading>加载中</MpLoading>
+  <MpSaving>保存中</MpSaving>
+  
+  <MpInvalidPort>端口无效</MpInvalidPort>
+  <MpInvalidAddress>地址无效</MpInvalidAddress>
+  <MpInvalidGameName>游戏名无效</MpInvalidGameName>
+  
+  <MpWrongProtocol>protocol版本不对</MpWrongProtocol>
+  <MpWrongMultiplayerVersionInfo>这个服务器运行在 {0} (protocol {1}).</MpWrongMultiplayerVersionInfo>
+  
+  <MpWrongDefs>插件定义有问题</MpWrongDefs>
+  <MpWrongDefsInfo>确定你安装的插件，它们的版本和服务器的版本一致</MpWrongDefsInfo>
+  <MpModList>插件表</MpModList>
+  <MpSeeModList>看插件表</MpSeeModList>
+  
+  <MpServerClosed>服务器关了</MpServerClosed>
+  <MpServerFull>服务器满了</MpServerFull>
+  <MpKicked>你被踢了</MpKicked>
+
+  <MpInvalidUsernameAlreadyPlaying>用户名已经在玩中</MpInvalidUsernameAlreadyPlaying>
+  <MpInvalidUsernameChars>用户名有非法字</MpInvalidUsernameChars>
+  <MpInvalidUsernameLength>用户名长度出错</MpInvalidUsernameLength>
+  <MpChangeUsernameInfo>在插件设置里面， 你可以改用户名</MpChangeUsernameInfo>
+  
+  <MpPlayerConnected>{0} 加入了</MpPlayerConnected>
+  <MpPlayerDisconnected>{0} 离开了</MpPlayerDisconnected>
+  
+  <MpReplayOutdated>(旧版本)</MpReplayOutdated>
+  <MpReplayOutdatedDesc1>This replay was made for protocol version {0}, but you are running version {1}.</MpReplayOutdatedDesc1>
+  <MpReplayOutdatedDesc2>The replay might not play correctly.</MpReplayOutdatedDesc2>
+  <MpReplayOutdatedDesc3>Possible incompatibilities are listed with the release history.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>This file contains additional information and hosting from it should work fine.</MpReplayOutdatedDesc4>
+  
+  <MpServerCloseConfirmation>Are you sure you want to close the server? Unsaved progress will be lost.</MpServerCloseConfirmation>
+  
+  <MpHostServer>Host a server</MpHostServer>
+  <MpSaveReplay>Save replay</MpSaveReplay>
+  
+  <MpConvert>转换到单人游戏</MpConvert>
+  <MpConverting>转化中</MpConverting>
+  
+  <MpUsername>用户名</MpUsername>
+  <MpShowPlayerCursors>Show player cursors</MpShowPlayerCursors>
+  <MpAutoAcceptSteam>Auto-accept Steam</MpAutoAcceptSteam>
+  <MpAutoAcceptSteamDesc>Automatically accept any incoming Steam connection requests.</MpAutoAcceptSteamDesc>
+  <MpTransparentChat>Transparent chat</MpTransparentChat>
+  
+  <MpAutosaveSlots>Autosave slots</MpAutosaveSlots>
+  <MpAutosaveSlotsDesc>How many autosave files to keep.</MpAutosaveSlotsDesc>
+  
+  <MpTraderLeavesIn>Leaves in {0}</MpTraderLeavesIn>
+  
+  <MpChatButton>聊天</MpChatButton>
+  <MpTradingButton>交易</MpTradingButton>
+  
+  <MpChatPlayers>玩家 ({0}):</MpChatPlayers>
+  <MpSend>发</MpSend>
+  <MpSteamAcceptTitle>接受Steam玩家</MpSteamAcceptTitle>
+  <MpSteamAcceptDesc>按这里接受</MpSteamAcceptDesc>
+  <MpSteamAccepted>用户被接受了</MpSteamAccepted>
+  
+  <MpConnectingTo>链接到 {0}:{1}</MpConnectingTo>
+  <MpConnected>链接成功.</MpConnected>
+  <MpDownloading>下载中 ({0}%)</MpDownloading>
+  
+  <MpSteamConnectingTo>Connecting to a game hosted by {0}</MpSteamConnectingTo>
+  <MpSteamConnectingWaiting>Waiting for host to accept</MpSteamConnectingWaiting>
+  
+  <MpTicksBehind>You are {0} ticks behind.</MpTicksBehind>
+  <MpLowerGameSpeed>Consider lowering the game speed.</MpLowerGameSpeed>
+  <MpForceCatchUp>Click to force catch up.</MpForceCatchUp>
+  
+  <MpDesynced>The game state has desynced.</MpDesynced>
+  <MpTryResync>Try resync</MpTryResync>
+  
+  <MpSaveReplayAs>Save replay as</MpSaveReplayAs>
+  <MpWillOverwrite>Will overwrite</MpWillOverwrite>
+  <MpReplaySaved>Replay saved</MpReplaySaved>
+  
+  <MpGameName>游戏名</MpGameName>
+  <MpMaxPlayers>最多玩家</MpMaxPlayers>
+  <MpAutosaveEvery>自动保存每</MpAutosaveEvery>
+  <MpAutosaveMinutes>分钟</MpAutosaveMinutes>
+  <MpLanDesc1>Broadcast the game to your local network.</MpLanDesc1>
+  <MpLanDesc2>Resolved LAN address: {0}</MpLanDesc2>
+  <MpArbiterDesc>A game instance which runs in the background and helps with desync solving.</MpArbiterDesc>
+  <MpAsyncTimeDesc>Separate time controls for each map and the planet.</MpAsyncTimeDesc>
+  <MpExperimentalFeature>测试功能</MpExperimentalFeature>
+  
+  <MpHostButton>开始服务端</MpHostButton>
+  <MpWatchReplay>看重播</MpWatchReplay>
+  <MpNothingSelected>无选择</MpNothingSelected>
+  <MpNoSaves>多人游戏必须从保存文件开始启动</MpNoSaves>
+  
+  <MpHostIngame>从这个游戏开始服务端</MpHostIngame>
+  <MpHostReplay>从重播文件开始服务端</MpHostReplay>
+  <MpHostSavefile>从保存文件开始服务端</MpHostSavefile>
+  
+  <MpJoinButton>加入</MpJoinButton>
+  <MpConnectButton>链接中</MpConnectButton>
+  <MpLanSearching>寻找中</MpLanSearching>
+  
+  <MpNotConnectedToSteam>没链接到Steam</MpNotConnectedToSteam>
+  <MpNoFriendsPlaying>现在没朋友在玩RimWorld</MpNoFriendsPlaying>
+  <MpPlayingRimWorld>玩RimWorld</MpPlayingRimWorld>
+  <MpNotInMultiplayer>不在多人游戏中</MpNotInMultiplayer>
+  
+  <MpLan>LAN本地</MpLan>
+  <MpDirect>Direct直连</MpDirect>
+  <MpSteam>Steam</MpSteam>
+  <MpHostTab>Host开服务端</MpHostTab>
+  
+  <MpMultiplayer>多人游戏</MpMultiplayer>
+  <MpSingleplayer>单人游戏</MpSingleplayer>
+  
+  <MpNotAvailable>多人游戏不支持</MpNotAvailable>
+  <MpCallingFactionNotAvailable>多人游戏不支持呼叫别的帮派</MpCallingFactionNotAvailable>
+  
+  <MpAggressiveTicking>加速秒表</MpAggressiveTicking>
+  <MpAggressiveTickingDesc>试着和服务器同步（会减FPS）</MpAggressiveTickingDesc>
+  
+</LanguageData>
