@@ -31,10 +31,10 @@
   <MpPlayerDisconnected>{0} 离开了</MpPlayerDisconnected>
   
   <MpReplayOutdated>(旧版本)</MpReplayOutdated>
-  <MpReplayOutdatedDesc1>This replay was made for protocol version {0}, but you are running version {1}.</MpReplayOutdatedDesc1>
-  <MpReplayOutdatedDesc2>The replay might not play correctly.</MpReplayOutdatedDesc2>
-  <MpReplayOutdatedDesc3>Possible incompatibilities are listed with the release history.</MpReplayOutdatedDesc3>
-  <MpReplayOutdatedDesc4>This file contains additional information and hosting from it should work fine.</MpReplayOutdatedDesc4>
+  <MpReplayOutdatedDesc1>重播用 protocol 版本 {0}, 但是你用 {1} 版本.</MpReplayOutdatedDesc1>
+  <MpReplayOutdatedDesc2>重播播放不了.</MpReplayOutdatedDesc2>
+  <MpReplayOutdatedDesc3>不支持的插件能在发布历史里面看.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>本文件有多余信息， 开服务端应该没问题.</MpReplayOutdatedDesc4>
   
   <MpServerCloseConfirmation>真的想关服务器么？ 没保存的数据会消失。</MpServerCloseConfirmation>
   
@@ -45,15 +45,15 @@
   <MpConverting>转化中</MpConverting>
   
   <MpUsername>用户名</MpUsername>
-  <MpShowPlayerCursors>Show player cursors</MpShowPlayerCursors>
-  <MpAutoAcceptSteam>Auto-accept Steam</MpAutoAcceptSteam>
-  <MpAutoAcceptSteamDesc>Automatically accept any incoming Steam connection requests.</MpAutoAcceptSteamDesc>
-  <MpTransparentChat>Transparent chat</MpTransparentChat>
+  <MpShowPlayerCursors>显示用户指标</MpShowPlayerCursors>
+  <MpAutoAcceptSteam>自动接收 Steam</MpAutoAcceptSteam>
+  <MpAutoAcceptSteamDesc>自动接受任何 Steam 链接的请求.</MpAutoAcceptSteamDesc>
+  <MpTransparentChat>透明的聊天</MpTransparentChat>
   
-  <MpAutosaveSlots>Autosave slots</MpAutosaveSlots>
-  <MpAutosaveSlotsDesc>How many autosave files to keep.</MpAutosaveSlotsDesc>
+  <MpAutosaveSlots>自动保存的表</MpAutosaveSlots>
+  <MpAutosaveSlotsDesc>保存多少自动保存.</MpAutosaveSlotsDesc>
   
-  <MpTraderLeavesIn>Leaves in {0}</MpTraderLeavesIn>
+  <MpTraderLeavesIn>{0} 后离开</MpTraderLeavesIn>
   
   <MpChatButton>聊天</MpChatButton>
   <MpTradingButton>交易</MpTradingButton>
