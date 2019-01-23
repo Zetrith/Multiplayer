@@ -23,6 +23,17 @@ namespace Multiplayer.Client
 {
     public static class MpUtil
     {
+        static Func<ICustomAttributeProvider, Type, bool> IsDefinedInternal;
+
+        // Doesn't load the type
+        public static bool HasAttr(ICustomAttributeProvider provider, Type attrType)
+        {
+            if (IsDefinedInternal == null)
+                IsDefinedInternal = (Func<ICustomAttributeProvider, Type, bool>)Delegate.CreateDelegate(typeof(Func<ICustomAttributeProvider, Type, bool>), AccessTools.Method(Type.GetType("System.MonoCustomAttrs"), "IsDefinedInternal"));
+
+            return IsDefinedInternal(provider, attrType);
+        }
+
         public static string FixedEllipsis()
         {
             int num = Mathf.FloorToInt(Time.realtimeSinceStartup) % 3;
@@ -127,8 +138,7 @@ namespace Multiplayer.Client
         private static IntPtr walkPtr = Marshal.GetFunctionPointerForDelegate((walk_stack)WalkStack);
         private static Func<IntPtr, MethodBase> methodHandleToMethodBase;
 
-        // Not thread safe
-        public static MethodBase[] FastStackTrace(int skip = 0, MethodBase upTo = null, int max = 0)
+        public static MethodBase MethodHandleToMethodBase(IntPtr methodHandle)
         {
             if (methodHandleToMethodBase == null)
             {
@@ -147,6 +157,12 @@ namespace Multiplayer.Client
                 methodHandleToMethodBase = (Func<IntPtr, MethodBase>)dyn.CreateDelegate(typeof(Func<IntPtr, MethodBase>));
             }
 
+            return methodHandleToMethodBase(methodHandle);
+        }
+
+        // Not thread safe
+        public static MethodBase[] FastStackTrace(int skip = 0, MethodBase upTo = null, int max = 0)
+        {
             depth = 0;
             methods.Clear();
 
@@ -165,7 +181,7 @@ namespace Multiplayer.Client
         {
             depth++;
             if (depth > (int)skip)
-                methods.Add(methodHandleToMethodBase(methodHandle));
+                methods.Add(MethodHandleToMethodBase(methodHandle));
             if (methodHandle == upToHandle || depth == max) return true;
             return false;
         }

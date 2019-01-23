@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Xml;
 using UnityEngine;
@@ -27,7 +29,6 @@ namespace Multiplayer.Client
         {
             EarlyMarkNoInline(typeof(Multiplayer).Assembly);
             EarlyPatches();
-            EarlyInit();
 
             settings = GetSettings<MpSettings>();
         }
@@ -107,23 +108,6 @@ namespace Multiplayer.Client
             );
         }
 
-        private void EarlyInit()
-        {
-            foreach (var thingMaker in DefDatabase<ThingSetMakerDef>.AllDefs)
-            {
-                CaptureThingSetMakers.captured.Add(thingMaker.root);
-
-                if (thingMaker.root is ThingSetMaker_Sum sum)
-                    sum.options.Select(o => o.thingSetMaker).Do(CaptureThingSetMakers.captured.Add);
-
-                if (thingMaker.root is ThingSetMaker_Conditional cond)
-                    CaptureThingSetMakers.captured.Add(cond.thingSetMaker);
-
-                if (thingMaker.root is ThingSetMaker_RandomOption rand)
-                    rand.options.Select(o => o.thingSetMaker).Do(CaptureThingSetMakers.captured.Add);
-            }
-        }
-
         private string slotsBuffer;
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -139,6 +123,9 @@ namespace Multiplayer.Client
             listing.CheckboxLabeled("MpAutoAcceptSteam".Translate(), ref settings.autoAcceptSteam, "MpAutoAcceptSteamDesc".Translate());
             listing.CheckboxLabeled("MpTransparentChat".Translate(), ref settings.transparentChat);
             listing.CheckboxLabeled("MpAggressiveTicking".Translate(), ref settings.aggressiveTicking, "MpAggressiveTickingDesc".Translate());
+
+            if (Prefs.DevMode)
+                listing.CheckboxLabeled("Show debug info", ref settings.showDevInfo);
 
             listing.End();
         }
@@ -188,6 +175,7 @@ namespace Multiplayer.Client
         public bool transparentChat;
         public int autosaveSlots = 5;
         public bool aggressiveTicking;
+        public bool showDevInfo;
 
         public override void ExposeData()
         {
@@ -197,6 +185,7 @@ namespace Multiplayer.Client
             Scribe_Values.Look(ref transparentChat, "transparentChat");
             Scribe_Values.Look(ref autosaveSlots, "autosaveSlots", 5);
             Scribe_Values.Look(ref aggressiveTicking, "aggressiveTicking");
+            Scribe_Values.Look(ref showDevInfo, "showDevInfo");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿extern alias zip;
 
 using Harmony;
+using Ionic.Crc;
 using Multiplayer.Common;
 using RimWorld;
 using System;
@@ -89,6 +90,13 @@ namespace Multiplayer.Client
         public static void RemoveAll<K, V>(this Dictionary<K, V> dict, Func<K, V, bool> predicate)
         {
             dict.RemoveAll(p => predicate(p.Key, p.Value));
+        }
+
+        public static void RemoveAll<T>(this List<T> list, Func<T, int, bool> predicate)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+                if (predicate(list[i], i))
+                    list.RemoveAt(i);
         }
 
         public static MapAsyncTimeComp AsyncTime(this Map map)
@@ -384,6 +392,11 @@ namespace Multiplayer.Client
             if (!assemblies.Exists)
                 return new FileInfo[0];
             return assemblies.GetFiles("*.*", SearchOption.AllDirectories).Where(f => f.Extension.ToLower() == ".dll").ToArray();
+        }
+
+        public static int CRC32(this FileInfo[] files)
+        {
+            return files.Select(f => new CRC32().GetCrc32(f.OpenRead())).Aggregate(0, (a, b) => Gen.HashCombineInt(a, b));
         }
     }
 

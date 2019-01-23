@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using Harmony.ILCopying;
 using Multiplayer.Common;
 using RimWorld;
 using RimWorld.Planet;
@@ -77,6 +78,7 @@ namespace Multiplayer.Client
     }
 
     [MpPatch(typeof(OptionListingUtility), nameof(OptionListingUtility.DrawOptionListing))]
+    [HotSwappable]
     public static class MainMenuPatch
     {
         static void Prefix(Rect rect, List<ListableOption> optList)
@@ -91,7 +93,7 @@ namespace Multiplayer.Client
                     optList.Insert(newColony + 1, new ListableOption("Multiplayer", () =>
                     {
                         if (Prefs.DevMode && Event.current.button == 1)
-                            Find.WindowStack.Add(new DebugTextWindow("[name | id | assembly hash]\n" + LoadedModManager.RunningMods.Select((m, index) => $"{m.Name} | {m.Identifier} | {Multiplayer.enabledModAssemblyHashes[index]}").Join(delimiter: "\n")));
+                            ShowModDebugInfo();
                         else
                             Find.WindowStack.Add(new ServerBrowser());
                     }));
@@ -142,6 +144,19 @@ namespace Multiplayer.Client
                     }
                 }
             }
+        }
+
+        static void ShowModDebugInfo()
+        {
+            var mods = LoadedModManager.RunningModsListForReading;
+
+            DebugTables.MakeTablesDialog(
+                mods.Select((mod, i) => i),
+                new TableDataGetter<int>($"Mod name {new string(' ', 20)}", i => mods[i].Name),
+                new TableDataGetter<int>($"Mod id {new string(' ', 20)}", i => mods[i].Identifier),
+                new TableDataGetter<int>($"Assembly hash {new string(' ', 10)}", i => Multiplayer.enabledModAssemblyHashes[i]),
+                new TableDataGetter<int>($"About hash {new string(' ', 10)}", i => Multiplayer.enabledAboutHashes[i])
+            );
         }
 
         public static void AskQuitToMainMenu()
@@ -947,11 +962,7 @@ namespace Multiplayer.Client
         static void Postfix(Pawn_MeleeVerbs __instance, Thing target, ref Verb __result)
         {
             if (Cancel)
-            {
-                __result =
-                    __instance.GetUpdatedAvailableVerbsList(false).FirstOrDefault(ve => ve.GetSelectionWeight(target) != 0).verb ??
-                    __instance.GetUpdatedAvailableVerbsList(true).FirstOrDefault(ve => ve.GetSelectionWeight(target) != 0).verb;
-            }
+                __result = __instance.GetUpdatedAvailableVerbsList(false).FirstOrDefault(ve => ve.GetSelectionWeight(target) != 0).verb;
         }
     }
 
@@ -1424,51 +1435,6 @@ namespace Multiplayer.Client
         }
     }
 
-    [HarmonyPatch(typeof(Page_ModsConfig), nameof(Page_ModsConfig.DoModRow))]
-    static class PageModsPatch
-    {
-        public static string currentXMLMod;
-        public static Dictionary<string, string> truncatedStrings;
-
-        static void Prefix(Page_ModsConfig __instance, ModMetaData mod)
-        {
-            ModManager_ButtonPrefix(null, mod, __instance.truncatedModNamesCache);
-        }
-
-        public static void ModManager_ButtonPrefix(object __instance, ModMetaData ____selected, Dictionary<string, string> ____modNameTruncationCache)
-        {
-            if (!Input.GetKey(KeyCode.LeftShift)) return;
-
-            var mod = ____selected;
-            if (Multiplayer.xmlMods.Contains(mod.RootDir.FullName))
-            {
-                currentXMLMod = __instance == null ? mod.Name : (string)__instance.GetPropertyOrField("TrimmedName");
-                truncatedStrings = ____modNameTruncationCache;
-            }
-        }
-
-        public static void Postfix()
-        {
-            currentXMLMod = null;
-            truncatedStrings = null;
-        }
-    }
-
-    [HarmonyPatch(typeof(Widgets), nameof(Widgets.Label), typeof(Rect), typeof(string))]
-    static class WidgetsLabelPatch
-    {
-        static void Prefix(ref Rect rect, ref string label)
-        {
-            if (PageModsPatch.currentXMLMod == null) return;
-
-            if (label == PageModsPatch.currentXMLMod || PageModsPatch.truncatedStrings.TryGetValue(PageModsPatch.currentXMLMod, out string truncated) && truncated == label)
-            {
-                rect.width += 50;
-                label = "<b>[XML]</b> " + label;
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(DirectXmlSaver), nameof(DirectXmlSaver.XElementFromObject), typeof(object), typeof(Type), typeof(string), typeof(FieldInfo), typeof(bool))]
     static class ExtendDirectXmlSaver
     {
@@ -1552,6 +1518,46 @@ namespace Multiplayer.Client
     static class CancelStoryWatcherEventInInterface
     {
         static bool Prefix() => !Multiplayer.InInterface;
+    }
+
+    [HarmonyPatch(typeof(DesignationDragger), nameof(DesignationDragger.UpdateDragCellsIfNeeded))]
+    static class CancelUpdateDragCellsIfNeeded
+    {
+        static bool Prefix() => !Multiplayer.ExecutingCmds;
+    }
+
+    [HarmonyPatch(typeof(Pawn_WorkSettings), nameof(Pawn_WorkSettings.SetPriority))]
+    static class WorkPrioritySameValue
+    {
+        [HarmonyPriority(MpPriority.MpFirst + 1)]
+        static bool Prefix(Pawn_WorkSettings __instance, WorkTypeDef w, int priority) => __instance.GetPriority(w) != priority;
+    }
+
+    [HarmonyPatch(typeof(Pawn_PlayerSettings), nameof(Pawn_PlayerSettings.AreaRestriction), MethodType.Setter)]
+    static class AreaRestrictionSameValue
+    {
+        [HarmonyPriority(MpPriority.MpFirst + 1)]
+        static bool Prefix(Pawn_PlayerSettings __instance, Area value) => __instance.AreaRestriction != value;
+    }
+
+    [MpPatch(typeof(GlobalTargetInfo), nameof(GlobalTargetInfo.GetHashCode))]
+    [MpPatch(typeof(TargetInfo), nameof(TargetInfo.GetHashCode))]
+    static class PatchTargetInfoHashCodes
+    {
+        static MethodInfo Combine = AccessTools.Method(typeof(Gen), nameof(Gen.HashCombine)).MakeGenericMethod(typeof(Map));
+
+        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> insts)
+        {
+            foreach (var inst in insts)
+            {
+                if (inst.operand == Combine)
+                    inst.operand = AccessTools.Method(typeof(PatchTargetInfoHashCodes), nameof(CombineHashes));
+
+                yield return inst;
+            }
+        }
+
+        static int CombineHashes(int seed, Map map) => Gen.HashCombineInt(seed, map.uniqueID);
     }
 
 }

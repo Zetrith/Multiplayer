@@ -46,7 +46,6 @@ namespace Multiplayer.Client
         public static string username;
         public static bool arbiterInstance;
         public static HarmonyInstance harmony => MultiplayerMod.harmony;
-        public static bool enableSyncLog;
 
         public static bool reloading;
 
@@ -57,6 +56,8 @@ namespace Multiplayer.Client
         public static IdBlock GlobalIdBlock => game.worldComp.globalIdBlock;
         public static Faction DummyFaction => game.dummyFaction;
         public static MultiplayerWorldComp WorldComp => game.worldComp;
+
+        public static bool ShowDevInfo => MpVersion.IsDebug || (Prefs.DevMode && MultiplayerMod.settings.showDevInfo);
 
         public static Faction RealPlayerFaction
         {
@@ -79,6 +80,7 @@ namespace Multiplayer.Client
 
         public static HashSet<string> xmlMods = new HashSet<string>();
         public static int[] enabledModAssemblyHashes;
+        public static int[] enabledAboutHashes;
         public static Dictionary<string, DefInfo> localDefInfos;
 
         static Multiplayer()
@@ -100,7 +102,8 @@ namespace Multiplayer.Client
                     xmlMods.Add(mod.RootDir.FullName);
             }
 
-            enabledModAssemblyHashes = LoadedModManager.RunningModsListForReading.Select(m => m.ModAssemblies().Select(f => new CRC32().GetCrc32(f.OpenRead())).Aggregate(0, (a, b) => Gen.HashCombineInt(a, b))).ToArray();
+            enabledModAssemblyHashes = LoadedModManager.RunningModsListForReading.Select(m => m.ModAssemblies().CRC32()).ToArray();
+            enabledAboutHashes = LoadedModManager.RunningModsListForReading.Select(m => new DirectoryInfo(Path.Combine(m.RootDir, "About")).GetFiles().CRC32()).ToArray();
 
             SimpleProfiler.Init(username);
 
@@ -220,10 +223,10 @@ namespace Multiplayer.Client
                 {
                     Replay.LoadReplay(Replay.ReplayFile(replay), true, () =>
                     {
-                        var rand = Find.Maps.Select(m => m.AsyncTime().randState).Select(s => $"{(uint)s} {s >> 32}");
+                        var rand = Find.Maps.Select(m => m.AsyncTime().randState).Select(s => $"{s} {(uint)s} {s >> 32}");
 
                         Log.Message($"timer {TickPatch.Timer}");
-                        Log.Message($"world rand {(uint)WorldComp.randState} {WorldComp.randState >> 32}");
+                        Log.Message($"world rand {WorldComp.randState} {(uint)WorldComp.randState} {WorldComp.randState >> 32}");
                         Log.Message($"map rand {rand.ToStringSafeEnumerable()} | {Find.Maps.Select(m => m.AsyncTime().mapTicks).ToStringSafeEnumerable()}");
 
                         Application.Quit();
@@ -236,11 +239,6 @@ namespace Multiplayer.Client
                 ExtendDirectXmlSaver.extend = true;
                 DirectXmlSaver.SaveDataObject(new SyncContainer(), "SyncHandlers.xml");
                 ExtendDirectXmlSaver.extend = false;
-            }
-
-            if (GenCommandLine.CommandLineArgPassed("logsync"))
-            {
-                enableSyncLog = true;
             }
         }
 
@@ -272,8 +270,8 @@ namespace Multiplayer.Client
 
             // Remove side effects from methods which are non-deterministic during ticking (e.g. camera dependent motes and sound effects)
             {
-                var randPatchPrefix = new HarmonyMethod(typeof(RandPatches).GetMethod("Prefix"));
-                var randPatchPostfix = new HarmonyMethod(typeof(RandPatches).GetMethod("Postfix"));
+                var randPatchPrefix = new HarmonyMethod(typeof(RandPatches), "Prefix");
+                var randPatchPostfix = new HarmonyMethod(typeof(RandPatches), "Postfix");
 
                 var subSustainerStart = AccessTools.Method(typeof(SubSustainer), "<SubSustainer>m__0");
                 var sampleCtor = typeof(Sample).GetConstructor(new[] { typeof(SubSoundDef) });
@@ -336,26 +334,7 @@ namespace Multiplayer.Client
                 }
             }
 
-            // Compat with Fluffy's mod loader
-            var fluffysModButtonType = MpReflection.GetTypeByName("ModManager.ModButton_Installed");
-            if (fluffysModButtonType != null)
-            {
-                harmony.Patch(
-                    fluffysModButtonType.GetMethod("DoModButton"),
-                    new HarmonyMethod(typeof(PageModsPatch), nameof(PageModsPatch.ModManager_ButtonPrefix)),
-                    new HarmonyMethod(typeof(PageModsPatch), nameof(PageModsPatch.Postfix))
-                );
-            }
-
-            var cancelForArbiter = new HarmonyMethod(typeof(CancelForArbiter), "Prefix");
-
-            var prisonLaborBehavior = MpReflection.GetTypeByName("PrisonLabor.Behaviour_MotivationIcon");
-            if (prisonLaborBehavior != null)
-                harmony.Patch(prisonLaborBehavior.GetMethod("Update", new Type[0]), cancelForArbiter);
-
-            var prisonLaborPawnIcons = MpReflection.GetTypeByName("PrisonLabor.Core.GUI_Components.PawnIcons") ?? MpReflection.GetTypeByName("PrisonLabor.MapComponent_Icons");
-            if (prisonLaborPawnIcons != null)
-                harmony.Patch(prisonLaborPawnIcons.GetMethod("MapComponentTick", new Type[0]), cancelForArbiter);
+            ModPatches.Init();
         }
 
         public static UniqueList<Texture2D> icons = new UniqueList<Texture2D>();
@@ -439,6 +418,10 @@ namespace Multiplayer.Client
             dict["WorldObjectComp"] = GetDefInfo(Sync.worldObjectCompTypes, TypeHash);
             dict["IStoreSettingsParent"] = GetDefInfo(Sync.storageParents, TypeHash);
             dict["IPlantToGrowSettable"] = GetDefInfo(Sync.plantToGrowSettables, TypeHash);
+
+            dict["GameComponent"] = GetDefInfo(Sync.gameCompTypes, TypeHash);
+            dict["WorldComponent"] = GetDefInfo(Sync.worldCompTypes, TypeHash);
+            dict["MapComponent"] = GetDefInfo(Sync.mapCompTypes, TypeHash);
 
             foreach (var defType in GenTypes.AllLeafSubclasses(typeof(Def)))
             {
