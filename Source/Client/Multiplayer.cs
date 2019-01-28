@@ -429,7 +429,7 @@ namespace Multiplayer.Client
                 if (IgnoredVanillaDefTypes.Contains(defType)) continue;
 
                 var defs = GenDefDatabase.GetAllDefsInDatabaseForDef(defType);
-                dict.Add(defType.Name, GetDefInfo(defs, d => GenText.StableStringHash(d.defName)));
+                dict.Add(defType.Name, GetDefInfo(defs.OrderBy(d => d.defName), d => GenText.StableStringHash(d.defName)));
             }
 
             return dict;
