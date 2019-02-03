@@ -1,127 +1,127 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
 
-  <MpSimulating>Simulating</MpSimulating>
-  <MpSimulatingServer>Simulating the server</MpSimulatingServer>
-  <MpLoading>Loading</MpLoading>
-  <MpSaving>Saving</MpSaving>
+  <MpSimulating>시뮬레이션 중</MpSimulating>
+  <MpSimulatingServer>서버 시뮬레이션 중</MpSimulatingServer>
+  <MpLoading>로딩중</MpLoading>
+  <MpSaving>저장중</MpSaving>
   
-  <MpInvalidPort>Invalid port</MpInvalidPort>
-  <MpInvalidAddress>Invalid address</MpInvalidAddress>
-  <MpInvalidGameName>Invalid game name</MpInvalidGameName>
+  <MpInvalidPort>유효하지 않은 포트</MpInvalidPort>
+  <MpInvalidAddress>유효하지 않은 주소</MpInvalidAddress>
+  <MpInvalidGameName>유효하지 않은 게임 이름</MpInvalidGameName>
   
-  <MpWrongProtocol>Wrong protocol version</MpWrongProtocol>
-  <MpWrongMultiplayerVersionInfo>The server is hosted on Multiplayer {0} (protocol {1}).</MpWrongMultiplayerVersionInfo>
+  <MpWrongProtocol>잘못된 프로토콜 버전</MpWrongProtocol>
+  <MpWrongMultiplayerVersionInfo>이 서버는 Multiplayer {0}(protocol {1})을 사용하고 있습니다.</MpWrongMultiplayerVersionInfo>
   
-  <MpWrongDefs>Mod definition mismatch</MpWrongDefs>
-  <MpWrongDefsInfo>Make sure your installed mods, their versions and order match the host's.</MpWrongDefsInfo>
-  <MpModList>Mod list</MpModList>
-  <MpSeeModList>See mod list</MpSeeModList>
+  <MpWrongDefs>모드 불일치</MpWrongDefs>
+  <MpWrongDefsInfo>설치된 모드와 버전이 서버와 동일한지 확인해주세요.</MpWrongDefsInfo>
+  <MpModList>모드 목록</MpModList>
+  <MpSeeModList>모드 목록 보기</MpSeeModList>
   
-  <MpServerClosed>Server closed</MpServerClosed>
-  <MpServerFull>Server is full</MpServerFull>
-  <MpKicked>You've been kicked</MpKicked>
+  <MpServerClosed>서버가 닫혔습니다</MpServerClosed>
+  <MpServerFull>서버가 다 찼습니다</MpServerFull>
+  <MpKicked>당신은 강퇴당했습니다</MpKicked>
 
-  <MpInvalidUsernameAlreadyPlaying>Username already online</MpInvalidUsernameAlreadyPlaying>
-  <MpInvalidUsernameChars>Username has invalid characters</MpInvalidUsernameChars>
-  <MpInvalidUsernameLength>Username has invalid length</MpInvalidUsernameLength>
-  <MpChangeUsernameInfo>You can change your username in the mod settings.</MpChangeUsernameInfo>
+  <MpInvalidUsernameAlreadyPlaying>같은 닉네임의 유저가 이미 접속중입니다</MpInvalidUsernameAlreadyPlaying>
+  <MpInvalidUsernameChars>닉네임에 유효하지 않은 문자가 있습니다</MpInvalidUsernameChars>
+  <MpInvalidUsernameLength>닉네임의 길이가 유효하지 않습니다</MpInvalidUsernameLength>
+  <MpChangeUsernameInfo>모드 설정에서 당신의 닉네임을 수정할 수 있습니다.</MpChangeUsernameInfo>
   
-  <MpPlayerConnected>{0} has joined</MpPlayerConnected>
-  <MpPlayerDisconnected>{0} has left</MpPlayerDisconnected>
+  <MpPlayerConnected>{0}이 접속했습니다</MpPlayerConnected>
+  <MpPlayerDisconnected>{0}이 게임을 떠났습니다</MpPlayerDisconnected>
   
-  <MpReplayOutdated>(Outdated)</MpReplayOutdated>
-  <MpReplayOutdatedDesc1>This replay was made for protocol version {0}, but you are running version {1}.</MpReplayOutdatedDesc1>
-  <MpReplayOutdatedDesc2>The replay might not play correctly.</MpReplayOutdatedDesc2>
-  <MpReplayOutdatedDesc3>Possible incompatibilities are listed with the release history.</MpReplayOutdatedDesc3>
-  <MpReplayOutdatedDesc4>This file contains additional information and hosting from it should work fine.</MpReplayOutdatedDesc4>
+  <MpReplayOutdated>(구버전)</MpReplayOutdated>
+  <MpReplayOutdatedDesc1>이 퀵세이브는 프로토콜 버전 {0}에서 만들어졌지만, 당신의 프로토콜 버전은 {1}입니다.</MpReplayOutdatedDesc1>
+  <MpReplayOutdatedDesc2>퀵세이브가 제대로 열리지 않을 수 있습니다.</MpReplayOutdatedDesc2>
+  <MpReplayOutdatedDesc3>호환성 문제들은 릴리즈 기록에서 확인하실 수 있습니다.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>이 파일은 추가적인 정보를 포함하므로 큰 지장없이 서버를 호스팅 할 수 있습니다.</MpReplayOutdatedDesc4>
   
-  <MpServerCloseConfirmation>Are you sure you want to close the server? Unsaved progress will be lost.</MpServerCloseConfirmation>
+  <MpServerCloseConfirmation>서버를 정말 닫으시겠습니까? 저장되지 않은 데이터는 소멸됩니다.</MpServerCloseConfirmation>
   
-  <MpHostServer>Host a server</MpHostServer>
-  <MpSaveReplay>Save replay</MpSaveReplay>
+  <MpHostServer>서버 직접 열기</MpHostServer>
+  <MpSaveReplay>퀵세이브</MpSaveReplay>
   
-  <MpConvert>Convert to singleplayer</MpConvert>
-  <MpConverting>Converting</MpConverting>
+  <MpConvert>싱글플레이로 변환</MpConvert>
+  <MpConverting>변환하는 중</MpConverting>
   
-  <MpUsername>Username</MpUsername>
-  <MpShowPlayerCursors>Show player cursors</MpShowPlayerCursors>
-  <MpAutoAcceptSteam>Auto-accept Steam</MpAutoAcceptSteam>
-  <MpAutoAcceptSteamDesc>Automatically accept any incoming Steam connection requests.</MpAutoAcceptSteamDesc>
-  <MpTransparentChat>Transparent chat</MpTransparentChat>
+  <MpUsername>닉네임</MpUsername>
+  <MpShowPlayerCursors>다른 플레이어의 커서 보기</MpShowPlayerCursors>
+  <MpAutoAcceptSteam>스팀 접속 모두 허용</MpAutoAcceptSteam>
+  <MpAutoAcceptSteamDesc>스팀에서의 모든 접속을 자동으로 허용합니다.</MpAutoAcceptSteamDesc>
+  <MpTransparentChat>투명한 채팅</MpTransparentChat>
   
-  <MpAutosaveSlots>Autosave slots</MpAutosaveSlots>
-  <MpAutosaveSlotsDesc>How many autosave files to keep.</MpAutosaveSlotsDesc>
+  <MpAutosaveSlots>자동저장 슬롯</MpAutosaveSlots>
+  <MpAutosaveSlotsDesc>자동저장의 최대 갯수를 설정합니다.</MpAutosaveSlotsDesc>
   
-  <MpTraderLeavesIn>Leaves in {0}</MpTraderLeavesIn>
+  <MpTraderLeavesIn>{0} 후 떠남</MpTraderLeavesIn>
   
-  <MpChatButton>Chat</MpChatButton>
-  <MpTradingButton>Trading</MpTradingButton>
+  <MpChatButton>채팅</MpChatButton>
+  <MpTradingButton>물물교환</MpTradingButton>
   
-  <MpChatPlayers>Players ({0}):</MpChatPlayers>
-  <MpSend>Send</MpSend>
-  <MpSteamAcceptTitle>Accept Steam players</MpSteamAcceptTitle>
-  <MpSteamAcceptDesc>Click to accept</MpSteamAcceptDesc>
-  <MpSteamAccepted>Player has been accepted</MpSteamAccepted>
+  <MpChatPlayers>플레이어 ({0}):</MpChatPlayers>
+  <MpSend>보내기</MpSend>
+  <MpSteamAcceptTitle>스팀 플레이어 접속 허가</MpSteamAcceptTitle>
+  <MpSteamAcceptDesc>허가를 위해 클릭해주세요</MpSteamAcceptDesc>
+  <MpSteamAccepted>유저가 허가되었습니다</MpSteamAccepted>
   
-  <MpConnectingTo>Connecting to {0}:{1}</MpConnectingTo>
-  <MpConnected>Connected.</MpConnected>
-  <MpDownloading>Downloading ({0}%)</MpDownloading>
+  <MpConnectingTo>{0}:{1}에 접속하는 중</MpConnectingTo>
+  <MpConnected>접속 완료.</MpConnected>
+  <MpDownloading>다운로드 중 ({0}%)</MpDownloading>
   
-  <MpSteamConnectingTo>Connecting to a game hosted by {0}</MpSteamConnectingTo>
-  <MpSteamConnectingWaiting>Waiting for host to accept</MpSteamConnectingWaiting>
+  <MpSteamConnectingTo>{0}의 게임으로 접속중</MpSteamConnectingTo>
+  <MpSteamConnectingWaiting>접속 허가를 대기하는 중</MpSteamConnectingWaiting>
   
-  <MpTicksBehind>You are {0} ticks behind.</MpTicksBehind>
-  <MpLowerGameSpeed>Consider lowering the game speed.</MpLowerGameSpeed>
-  <MpForceCatchUp>Click to force catch up.</MpForceCatchUp>
+  <MpTicksBehind>당신은 {0} ticks 만큼 뒤쳐지고 있습니다.</MpTicksBehind>
+  <MpLowerGameSpeed>게임 진행 속도를 잠시 늦춰주시면 도움이 됩니다.</MpLowerGameSpeed>
+  <MpForceCatchUp>서버와 강제로 동기화하기.</MpForceCatchUp>
   
-  <MpDesynced>The game state has desynced.</MpDesynced>
-  <MpTryResync>Try resync</MpTryResync>
+  <MpDesynced>게임 연결이 끊겼습니다.</MpDesynced>
+  <MpTryResync>다시 연결하기</MpTryResync>
   
-  <MpSaveReplayAs>Save replay as</MpSaveReplayAs>
-  <MpWillOverwrite>Will overwrite</MpWillOverwrite>
-  <MpReplaySaved>Replay saved</MpReplaySaved>
+  <MpSaveReplayAs>퀵세이브 이름</MpSaveReplayAs>
+  <MpWillOverwrite>덮어쓰기</MpWillOverwrite>
+  <MpReplaySaved>퀵세이브가 저장되었습니다</MpReplaySaved>
   
-  <MpGameName>Game name</MpGameName>
-  <MpMaxPlayers>Max players</MpMaxPlayers>
-  <MpAutosaveEvery>Autosave every</MpAutosaveEvery>
-  <MpAutosaveMinutes>minutes</MpAutosaveMinutes>
-  <MpLanDesc1>Broadcast the game to your local network.</MpLanDesc1>
-  <MpLanDesc2>Resolved LAN address: {0}</MpLanDesc2>
-  <MpArbiterDesc>A game instance which runs in the background and helps with desync solving.</MpArbiterDesc>
-  <MpAsyncTimeDesc>Separate time controls for each map and the planet.</MpAsyncTimeDesc>
-  <MpExperimentalFeature>Experimental feature</MpExperimentalFeature>
+  <MpGameName>서버 제목</MpGameName>
+  <MpMaxPlayers>최대 플레이어</MpMaxPlayers>
+  <MpAutosaveEvery>매 </MpAutosaveEvery>
+  <MpAutosaveMinutes>분 마다 자동저장</MpAutosaveMinutes>
+  <MpLanDesc1>로컬 네트워크로 서버 열기.</MpLanDesc1>
+  <MpLanDesc2>현재 LAN 주소: {0}</MpLanDesc2>
+  <MpArbiterDesc>접속을 유지해주는 게임 내 시스템입니다.</MpArbiterDesc>
+  <MpAsyncTimeDesc>시간을 맵과 행성마다 각각 따로 조절합니다.</MpAsyncTimeDesc>
+  <MpExperimentalFeature>실험실</MpExperimentalFeature>
   
-  <MpHostButton>Host</MpHostButton>
-  <MpWatchReplay>Watch</MpWatchReplay>
-  <MpNothingSelected>Nothing selected</MpNothingSelected>
-  <MpNoSaves>Multiplayer can only be played from already existing saves</MpNoSaves>
+  <MpHostButton>열기</MpHostButton>
+  <MpWatchReplay>내용 보기</MpWatchReplay>
+  <MpNothingSelected>선택된 세이브 없음</MpNothingSelected>
+  <MpNoSaves>멀티플레이는 이미 만들어진 세이브에서만 플레이 가능합니다.</MpNoSaves>
   
-  <MpHostIngame>Host from this game</MpHostIngame>
-  <MpHostReplay>Host from a replay</MpHostReplay>
-  <MpHostSavefile>Host from a savefile</MpHostSavefile>
+  <MpHostIngame>현재 게임에서 서버 열기</MpHostIngame>
+  <MpHostReplay>퀵세이브로 서버 열기</MpHostReplay>
+  <MpHostSavefile>세이브에서 서버 열기</MpHostSavefile>
   
-  <MpJoinButton>Join</MpJoinButton>
-  <MpConnectButton>Connect</MpConnectButton>
-  <MpLanSearching>Searching</MpLanSearching>
+  <MpJoinButton>접속하기</MpJoinButton>
+  <MpConnectButton>접속하기</MpConnectButton>
+  <MpLanSearching>게임 찾는중</MpLanSearching>
   
-  <MpNotConnectedToSteam>Not connected to Steam</MpNotConnectedToSteam>
-  <MpNoFriendsPlaying>No friends currently playing RimWorld</MpNoFriendsPlaying>
-  <MpPlayingRimWorld>Playing RimWorld</MpPlayingRimWorld>
-  <MpNotInMultiplayer>Not in multiplayer</MpNotInMultiplayer>
+  <MpNotConnectedToSteam>스팀에 연결되어 있지 않습니다</MpNotConnectedToSteam>
+  <MpNoFriendsPlaying>림월드를 플레이하고 있는 친구가 없습니다</MpNoFriendsPlaying>
+  <MpPlayingRimWorld>림월드 플레이 중</MpPlayingRimWorld>
+  <MpNotInMultiplayer>멀티플레이 중이 아님</MpNotInMultiplayer>
   
   <MpLan>LAN</MpLan>
-  <MpDirect>Direct</MpDirect>
-  <MpSteam>Steam</MpSteam>
-  <MpHostTab>Host</MpHostTab>
+  <MpDirect>직접 연결</MpDirect>
+  <MpSteam>스팀</MpSteam>
+  <MpHostTab>열기</MpHostTab>
   
-  <MpMultiplayer>Multiplayer</MpMultiplayer>
-  <MpSingleplayer>Singleplayer</MpSingleplayer>
+  <MpMultiplayer>멀티플레이</MpMultiplayer>
+  <MpSingleplayer>싱글플레이</MpSingleplayer>
   
-  <MpNotAvailable>Not available in multiplayer.</MpNotAvailable>
-  <MpCallingFactionNotAvailable>Calling other factions is currently not available in multiplayer.</MpCallingFactionNotAvailable>
+  <MpNotAvailable>멀티플레이에서는 불가능합니다.</MpNotAvailable>
+  <MpCallingFactionNotAvailable>다른 부족과 연락하는것은 아직 멀티플레이에서 지원하지 않습니다.</MpCallingFactionNotAvailable>
   
-  <MpAggressiveTicking>Aggressive ticking</MpAggressiveTicking>
-  <MpAggressiveTickingDesc>Always try to automatically catch up with the server at the cost of FPS.</MpAggressiveTickingDesc>
+  <MpAggressiveTicking>강제 동기화</MpAggressiveTicking>
+  <MpAggressiveTickingDesc>프레임 손실을 무시하고 서버와의 동기화를 최우선시합니다.</MpAggressiveTickingDesc>
   
 </LanguageData>
