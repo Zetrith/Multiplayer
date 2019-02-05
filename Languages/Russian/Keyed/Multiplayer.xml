@@ -11,10 +11,10 @@
   <MpInvalidGameName>Неверное игровое имя</MpInvalidGameName>
   
   <MpWrongProtocol>Неверная версия протокола</MpWrongProtocol>
-  <MpWrongModVersionInfo>Удостоверьтесь что вы используете одинаковые версии Мультиплеера с хостом.</MpWrongModVersionInfo>
+  <MpWrongModVersionInfo>Удостоверьтесь, что вы используете одинаковую версию мультиплеера с хостом.</MpWrongModVersionInfo>
   
   <MpWrongDefs>Несоответствие определений в моде</MpWrongDefs>
-  <MpWrongDefsInfo>Удостоверьтесь что ваши установленные моды, их версии и порядок совпадают с таковыми у хоста.</MpWrongDefsInfo>
+  <MpWrongDefsInfo>Удостоверьтесь, что ваши установленные моды, их версии и порядок совпадают с таковыми у хоста.</MpWrongDefsInfo>
   <MpModList>Список модов</MpModList>
   <MpSeeModList>Посмотреть список модов</MpSeeModList>
   
@@ -22,7 +22,7 @@
   <MpServerFull>Сервер полон</MpServerFull>
   <MpKicked>Вас кикнули</MpKicked>
 
-  <MpInvalidUsernameAlreadyPlaying>Пользователь с таким именем уже есть онлайн</MpInvalidUsernameAlreadyPlaying>
+  <MpInvalidUsernameAlreadyPlaying>Пользователь с таким именем уже есть на сервере</MpInvalidUsernameAlreadyPlaying>
   <MpInvalidUsernameChars>В имени пользователя содержатся недопустимые символы</MpInvalidUsernameChars>
   <MpInvalidUsernameLength>Недопустимая длина имени пользователя</MpInvalidUsernameLength>
   <MpChangeUsernameInfo>Вы можете изменить имя пользователя .</MpChangeUsernameInfo>
@@ -36,7 +36,7 @@
   <MpReplayOutdatedDesc3>Возможное несовместимости указаны в списке релизов.</MpReplayOutdatedDesc3>
   <MpReplayOutdatedDesc4>Данный файл содержит доп информацию и хостить с него можно.</MpReplayOutdatedDesc4>
   
-  <MpServerCloseConfirmation>Вы уверены что хотите закрыть сервер? Несохраненный прогресс будет потерян.</MpServerCloseConfirmation>
+  <MpServerCloseConfirmation>Вы уверены, что хотите закрыть сервер? Несохраненный прогресс будет потерян.</MpServerCloseConfirmation>
   
   <MpHostServer>Хостить сервер</MpHostServer>
   <MpSaveReplay>Сохранить реплей</MpSaveReplay>
@@ -51,7 +51,7 @@
   <MpTransparentChat>Открытый чат</MpTransparentChat>
   
   <MpAutosaveSlots>Слоты автосохранений</MpAutosaveSlots>
-  <MpAutosaveSlotsDesc>Сколько файлов автосохранений содержать.</MpAutosaveSlotsDesc>
+  <MpAutosaveSlotsDesc>Количество файлов автосохранений.</MpAutosaveSlotsDesc>
   
   <MpTraderLeavesIn>Покинет через {0}</MpTraderLeavesIn>
   
@@ -71,9 +71,9 @@
   <MpSteamConnectingTo>Соединение с игрой, которую хостит {0}</MpSteamConnectingTo>
   <MpSteamConnectingWaiting>Ожидание принятия хостом</MpSteamConnectingWaiting>
   
-  <MpTicksBehind>Вы в {0} тактах позади.</MpTicksBehind>
+  <MpTicksBehind>Вы в {0} тиках позади.</MpTicksBehind>
   <MpLowerGameSpeed>Обдумайте уменьшение скорости игры.</MpLowerGameSpeed>
-  <MpForceCatchUp>Нажмите чтобы force catch up.</MpForceCatchUp>
+  <MpForceCatchUp>Нажмите, чтобы насильно подобрать.</MpForceCatchUp>
   
   <MpDesynced>Игра десинхронизирована.</MpDesynced>
   <MpTryResync>Попробовать ресинхр.</MpTryResync>
@@ -86,7 +86,7 @@
   <MpMaxPlayers>Макс. игроков</MpMaxPlayers>
   <MpAutosaveEvery>Автосохранение кажд.</MpAutosaveEvery>
   <MpAutosaveMinutes>минут</MpAutosaveMinutes>
-  <MpLanDesc1>Броадкастить игровую сессию по LAN.</MpLanDesc1>
+  <MpLanDesc1>Транслировать игровую сессию по LAN.</MpLanDesc1>
   <MpLanDesc2>Вычисленный LAN адрес: {0}</MpLanDesc2>
   <MpArbiterDesc>Игра, которая запускается в трее и помогает с десинхронизацией.</MpArbiterDesc>
   <MpAsyncTimeDesc>Разделить контроль времени для каждой карты и планеты.</MpAsyncTimeDesc>
