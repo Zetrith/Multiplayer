@@ -18,6 +18,7 @@ using Verse;
 using Verse.Steam;
 using Harmony;
 using zip::Ionic.Zip;
+using System.Net.Sockets;
 
 namespace Multiplayer.Client
 {
@@ -266,7 +267,7 @@ namespace Multiplayer.Client
             if (Widgets.ButtonText(new Rect(width, 0, 120, 40), "MpHostButton".Translate()))
             {
                 CheckGameVersionAndMods(
-                    file, 
+                    file,
                     () => { Close(false); Find.WindowStack.Add(new HostWindow(file) { returnToServerBrowser = true }); }
                 );
             }
@@ -284,7 +285,7 @@ namespace Multiplayer.Client
 
             width += 120;
         }
-        
+
         private static void CheckGameVersionAndMods(SaveFile file, Action action)
         {
             ScribeMetaHeaderUtility.lastMode = ScribeMetaHeaderUtility.ScribeHeaderMode.Map;
@@ -513,26 +514,27 @@ namespace Multiplayer.Client
 
             if (Widgets.ButtonText(new Rect(inRect.center.x - btnWidth / 2, 60f, btnWidth, 35f), "MpConnectButton".Translate()))
             {
-                string ip = MultiplayerMod.settings.serverAddress.Trim();
+                string addr = MultiplayerMod.settings.serverAddress.Trim();
 
                 int port = MultiplayerServer.DefaultPort;
-                string[] ipport = ip.Split(':');
-                if (ipport.Length == 2)
-                    int.TryParse(ipport[1], out port);
+                string[] hostport = addr.Split(':');
+                if (hostport.Length == 2)
+                    int.TryParse(hostport[1], out port);
                 else
                     port = MultiplayerServer.DefaultPort;
 
-                if (!IPAddress.TryParse(ipport[0], out IPAddress address))
+                Log.Message("Connecting directly");
+                try
                 {
-                    Messages.Message("MpInvalidAddress".Translate(), MessageTypeDefOf.RejectInput, false);
-                }
-                else
-                {
-                    Log.Message("Connecting directly");
-
-                    Find.WindowStack.Add(new ConnectingWindow(address, port) { returnToServerBrowser = true });
+                    Find.WindowStack.Add(new ConnectingWindow(hostport[0], port) { returnToServerBrowser = true });
                     MultiplayerMod.settings.Write();
                     Close(false);
+                }
+                catch (SocketException e)
+                {
+                    if (e.SocketErrorCode != SocketError.HostNotFound) throw;
+
+                    Messages.Message("MpInvalidAddress".Translate(), MessageTypeDefOf.RejectInput, false);
                 }
             }
         }
@@ -570,7 +572,7 @@ namespace Multiplayer.Client
                 {
                     Close(false);
                     Log.Message("Connecting to lan server");
-                    Find.WindowStack.Add(new ConnectingWindow(server.endpoint.Address, server.endpoint.Port) { returnToServerBrowser = true });
+                    Find.WindowStack.Add(new ConnectingWindow(server.endpoint.Address.ToString(), server.endpoint.Port) { returnToServerBrowser = true });
                 }
 
                 Text.Anchor = TextAnchor.UpperLeft;
