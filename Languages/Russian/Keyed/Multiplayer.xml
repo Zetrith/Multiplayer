@@ -119,7 +119,7 @@
   <MpSingleplayer>Одиночная</MpSingleplayer>
   
   <MpNotAvailable>Недоступно в мультиплеере.</MpNotAvailable>
-  <MpCallingFactionNotAvailable>Называть иные фракции недоступно в мультиплеере.</MpCallingFactionNotAvailable>
+  <MpCallingFactionNotAvailable>Вызов фракций недоступен в мультиплеере.</MpCallingFactionNotAvailable>
   
   <MpAggressiveTicking>Агрессивные такты</MpAggressiveTicking>
   <MpAggressiveTickingDesc>Всегда пытаться автоматически догонять сервер ценой частоты кадров.</MpAggressiveTickingDesc>
