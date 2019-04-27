@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <MpSimulating>模擬中</MpSimulating>
+  <MpSimulatingServer>模擬伺服器中</MpSimulatingServer>
+  <MpLoading>讀取中</MpLoading>
+  <MpSaving>保存中</MpSaving>
+  
+  <MpInvalidPort>無效的端口</MpInvalidPort>
+  <MpInvalidAddress>無效的位置</MpInvalidAddress>
+  <MpInvalidGameName>無效的遊戲名稱</MpInvalidGameName>
+  
+  <MpWrongProtocol>錯誤的協議版本</MpWrongProtocol>
+  <MpWrongMultiplayerVersionInfo>這個伺服器正在主持多人模式 {0} (協議 {1}).</MpWrongMultiplayerVersionInfo>
+  
+  <MpWrongDefs>Mod 定義不符合</MpWrongDefs>
+  <MpWrongDefsInfo>請確認已安裝的Mod, 它們的版本要與房主的Mod相同.</MpWrongDefsInfo>
+  <MpModList>Mod列表</MpModList>
+  <MpSeeModList>查看Mod列表</MpSeeModList>
+  
+  <MpServerClosed>伺服器已關閉</MpServerClosed>
+  <MpServerFull>伺服器已滿</MpServerFull>
+  <MpKicked>你被趕出去了</MpKicked>
+
+  <MpInvalidUsernameAlreadyPlaying>此使用者名稱已上線</MpInvalidUsernameAlreadyPlaying>
+  <MpInvalidUsernameChars>使用者名稱包含無效字元</MpInvalidUsernameChars>
+  <MpInvalidUsernameLength>使用者名稱過長或過短</MpInvalidUsernameLength>
+  <MpChangeUsernameInfo>你可以在Mod設定裡更改你的使用者名稱.</MpChangeUsernameInfo>
+  
+  <MpPlayerConnected>{0} 已加入</MpPlayerConnected>
+  <MpPlayerDisconnected>{0} 已離開</MpPlayerDisconnected>
+  
+  <MpReplayOutdated>(Outdated)</MpReplayOutdated>
+  <MpReplayOutdatedDesc1>這個回放是由協議版本 {0} 錄製, 你正在執行版本 {1}.</MpReplayOutdatedDesc1>
+  <MpReplayOutdatedDesc2>回放也許會不正常播放.</MpReplayOutdatedDesc2>
+  <MpReplayOutdatedDesc3>Possible incompatibilities are listed with the release history.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>This file contains additional information and hosting from it should work fine.</MpReplayOutdatedDesc4>
+  
+  <MpServerCloseConfirmation>確定要關閉伺服器嗎? 未保存的進度將會遺失.</MpServerCloseConfirmation>
+  
+  <MpHostServer>主持一個遊戲</MpHostServer>
+  <MpSaveReplay>儲存回放</MpSaveReplay>
+  
+  <MpConvert>轉換成單人模式</MpConvert>
+  <MpConverting>轉換中</MpConverting>
+  
+  <MpUsername>使用者名稱</MpUsername>
+  <MpShowPlayerCursors>顯示玩家游標</MpShowPlayerCursors>
+  <MpAutoAcceptSteam>自動接受Steam</MpAutoAcceptSteam>
+  <MpAutoAcceptSteamDesc>自動接受任何Steam的連線請求.</MpAutoAcceptSteamDesc>
+  <MpTransparentChat>聊天室透明化</MpTransparentChat>
+  
+  <MpAutosaveSlots>自動儲存欄位</MpAutosaveSlots>
+  <MpAutosaveSlotsDesc>保留多少自動儲存紀錄.</MpAutosaveSlotsDesc>
+  
+  <MpTraderLeavesIn>在 {0} 後離開</MpTraderLeavesIn>
+  
+  <MpChatButton>聊天室</MpChatButton>
+  <MpTradingButton>貿易中</MpTradingButton>
+  
+  <MpChatPlayers>玩家 ({0}):</MpChatPlayers>
+  <MpSend>傳送</MpSend>
+  <MpSteamAcceptTitle>接受Steam玩家請求</MpSteamAcceptTitle>
+  <MpSteamAcceptDesc>點擊以接受</MpSteamAcceptDesc>
+  <MpSteamAccepted>已接受玩家請求</MpSteamAccepted>
+  
+  <MpConnectingTo>連接至 {0}:{1}</MpConnectingTo>
+  <MpConnected>已連接.</MpConnected>
+  <MpDownloading>下載中 ({0}%)</MpDownloading>
+  
+  <MpSteamConnectingTo>正在連接至由 {0} 所主持的伺服器</MpSteamConnectingTo>
+  <MpSteamConnectingWaiting>等待房主接受請求</MpSteamConnectingWaiting>
+  
+  <MpTicksBehind>你慢了 {0} ticks.</MpTicksBehind>
+  <MpLowerGameSpeed>正在嘗試降低遊戲速度.</MpLowerGameSpeed>
+  <MpForceCatchUp>點擊以強制跟上遊戲.</MpForceCatchUp>
+  
+  <MpDesynced>遊戲狀態不同步.</MpDesynced>
+  <MpTryResync>嘗試同步</MpTryResync>
+  
+  <MpSaveReplayAs>儲存回放</MpSaveReplayAs>
+  <MpWillOverwrite>將覆蓋</MpWillOverwrite>
+  <MpReplaySaved>回放已儲存</MpReplaySaved>
+  
+  <MpGameName>Game name</MpGameName>
+  <MpMaxPlayers>最大人數</MpMaxPlayers>
+  <MpAutosaveEvery>自動儲存每</MpAutosaveEvery>
+  <MpAutosaveMinutes>分鐘</MpAutosaveMinutes>
+  <MpLanDesc1>正在廣播遊戲至區域網路.</MpLanDesc1>
+  <MpLanDesc2>區域網路位置: {0}</MpLanDesc2>
+  <MpArbiterDesc>一個輔助機制將會在背景運行以幫助處理因網路延遲而不同步的狀況.</MpArbiterDesc>
+  <MpAsyncTimeDesc>分開不同地圖與星球中的時間控制.</MpAsyncTimeDesc>
+  <MpExperimentalFeature>實驗性功能</MpExperimentalFeature>
+  
+  <MpHostButton>主持</MpHostButton>
+  <MpWatchReplay>觀看</MpWatchReplay>
+  <MpNothingSelected>未選取</MpNothingSelected>
+  <MpNoSaves>多人模式只能從已存在的紀錄主持</MpNoSaves>
+  
+  <MpHostIngame>從這個遊戲開始主持</MpHostIngame>
+  <MpHostReplay>從一個存檔紀錄開始主持</MpHostReplay>
+  <MpHostSavefile>從一個存檔紀錄開始主持</MpHostSavefile>
+  
+  <MpJoinButton>加入</MpJoinButton>
+  <MpConnectButton>連接</MpConnectButton>
+  <MpLanSearching>搜尋中</MpLanSearching>
+  
+  <MpNotConnectedToSteam>未連接至 Steam</MpNotConnectedToSteam>
+  <MpNoFriendsPlaying>沒有朋友正在遊玩 RimWorld</MpNoFriendsPlaying>
+  <MpPlayingRimWorld>正在遊玩 RimWorld</MpPlayingRimWorld>
+  <MpNotInMultiplayer>不在多人模式中</MpNotInMultiplayer>
+  
+  <MpLan>區域連線</MpLan>
+  <MpDirect>直接連線</MpDirect>
+  <MpSteam>Steam</MpSteam>
+  <MpHostTab>主持遊戲</MpHostTab>
+  
+  <MpMultiplayer>多人遊戲存檔</MpMultiplayer>
+  <MpSingleplayer>單人遊戲存檔</MpSingleplayer>
+  
+  <MpNotAvailable>無法在多人模式使用.</MpNotAvailable>
+  <MpCallingFactionNotAvailable>目前無法在多人模式中呼叫其他勢力.</MpCallingFactionNotAvailable>
+  
+  <MpAggressiveTicking>系統時間加速</MpAggressiveTicking>
+  <MpAggressiveTickingDesc>總是自動嘗試更動FPS來跟上伺服器.</MpAggressiveTickingDesc>
+  
+</LanguageData>
