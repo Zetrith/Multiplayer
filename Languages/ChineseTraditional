@@ -33,8 +33,8 @@
   <MpReplayOutdated>(Outdated)</MpReplayOutdated>
   <MpReplayOutdatedDesc1>這個回放是由協議版本 {0} 錄製, 你正在執行版本 {1}.</MpReplayOutdatedDesc1>
   <MpReplayOutdatedDesc2>回放也許會不正常播放.</MpReplayOutdatedDesc2>
-  <MpReplayOutdatedDesc3>Possible incompatibilities are listed with the release history.</MpReplayOutdatedDesc3>
-  <MpReplayOutdatedDesc4>This file contains additional information and hosting from it should work fine.</MpReplayOutdatedDesc4>
+  <MpReplayOutdatedDesc3>不支援的Mod能在發布紀錄裡觀看.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>本紀錄有多餘的內容，但由此主持應該沒問題.</MpReplayOutdatedDesc4>
   
   <MpServerCloseConfirmation>確定要關閉伺服器嗎? 未保存的進度將會遺失.</MpServerCloseConfirmation>
   
