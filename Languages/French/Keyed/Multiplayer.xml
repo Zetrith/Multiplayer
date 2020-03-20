@@ -2,6 +2,7 @@
 <LanguageData>
 
   <MpSimulating>Simulation en cours</MpSimulating>
+  <MpSimulatingServer>Simulation du server</MpSimulatingServer>
   <MpLoading>Chargement</MpLoading>
   <MpSaving>Sauvegarde</MpSaving>
   
@@ -10,19 +11,30 @@
   <MpInvalidGameName>Nom de partie invalide</MpInvalidGameName>
   
   <MpWrongProtocol>Version de protocole incorrecte</MpWrongProtocol>
+  <MpWrongMultiplayerVersionInfo>Le serveur est hébergé en multijoueur {0} (protocole {1}).</MpWrongMultiplayerVersionInfo>
+
+  <MpWrongDefs>Non-concordance du mod</MpWrongDefs>
+  <MpWrongDefsInfo>Assurez-vous que les mods sont installés, que leurs versions et leur ordre correspondent à ceux de l'hôte.</MpWrongDefsInfo>
+  <MpModList>Liste de mods</MpModList>
+  <MpSeeModList>Voir la liste de mods</MpSeeModList>
+
   <MpServerClosed>Serveur fermé</MpServerClosed>
+  <MpServerFull>Serveur complet</MpServerFull>
+  <MpKicked>Vous avez été exclu</MpKicked>
 
   <MpInvalidUsernameAlreadyPlaying>Pseudo déjà connecté</MpInvalidUsernameAlreadyPlaying>
-  <MpInvalidUsernameChars>Pseudo comportant des charactères invalides</MpInvalidUsernameChars>
+  <MpInvalidUsernameChars>Pseudo comportant des caractères invalides</MpInvalidUsernameChars>
   <MpInvalidUsernameLength>Longueur du pseudo invalide</MpInvalidUsernameLength>
-  
+  <MpChangeUsernameInfo>Vous pouvez changer votre pseudo dans les paramètres du mod.</MpChangeUsernameInfo>
+
   <MpPlayerConnected>{0} a rejoint</MpPlayerConnected>
   <MpPlayerDisconnected>{0} a quitté</MpPlayerDisconnected>
-  
+
   <MpReplayOutdated>(Obsolète)</MpReplayOutdated>
   <MpReplayOutdatedDesc1>Ce replay était compatible avec la version du protocole {0}, mais vous avez la version {1}.</MpReplayOutdatedDesc1>
   <MpReplayOutdatedDesc2>Le replay peut ne pas jouer correctement.</MpReplayOutdatedDesc2>
   <MpReplayOutdatedDesc3>Les incompatibilitées possibles sont listées dans l'historique des versions.</MpReplayOutdatedDesc3>
+  <MpReplayOutdatedDesc4>Ce fichier contient des informations supplémentaires et l'hébergement devrait fonctionner correctement.</MpReplayOutdatedDesc4>
   
   <MpServerCloseConfirmation>Êtes-vous sûr(e) de vouloir fermer le serveur ? Tout progrès non sauvegardé sera perdu.</MpServerCloseConfirmation>
   
@@ -31,17 +43,21 @@
   
   <MpConvert>Convertir en partie solo</MpConvert>
   <MpConverting>Conversion</MpConverting>
-  
+
   <MpUsername>Pseudo</MpUsername>
   <MpShowPlayerCursors>Montrer les curseurs des joueurs</MpShowPlayerCursors>
   <MpAutoAcceptSteam>Acceptation Automatique Steam</MpAutoAcceptSteam>
   <MpAutoAcceptSteamDesc>Accepte automatiquement tout requête de connection via Steam.</MpAutoAcceptSteamDesc>
+  <MpTransparentChat>Chat transparent</MpTransparentChat>
+
+  <MpAutosaveSlots>Emplacements d'enregistrement automatique</MpAutosaveSlots>
+  <MpAutosaveSlotsDesc>Nombre de fichiers de sauvegarde automatique à conserver.</MpAutosaveSlotsDesc>
   
   <MpTraderLeavesIn>Part dans {0}</MpTraderLeavesIn>
   
   <MpChatButton>Chat</MpChatButton>
   <MpTradingButton>Commerce</MpTradingButton>
-  
+
   <MpChatPlayers>Joueurs ({0}):</MpChatPlayers>
   <MpSend>Envoyer</MpSend>
   <MpSteamAcceptTitle>Accepter les joueurs Steam</MpSteamAcceptTitle>
@@ -57,6 +73,7 @@
   
   <MpTicksBehind>Vous avez {0} ticks de retard.</MpTicksBehind>
   <MpLowerGameSpeed>Envisagez de diminuer la vitesse du jeu.</MpLowerGameSpeed>
+  <MpForceCatchUp>Cliquez pour forcer le rattrapage.</MpForceCatchUp>
   
   <MpDesynced>La partie a été désynchronisée.</MpDesynced>
   <MpTryResync>Essayer de resynchroniser</MpTryResync>
@@ -64,7 +81,7 @@
   <MpSaveReplayAs>Sauvegarder le replay en tant que</MpSaveReplayAs>
   <MpWillOverwrite>Écrasera</MpWillOverwrite>
   <MpReplaySaved>Replay enregistré</MpReplaySaved>
-  
+
   <MpGameName>Nom de la partie</MpGameName>
   <MpMaxPlayers>Joueurs maximum</MpMaxPlayers>
   <MpAutosaveEvery>Fréquence sauvegarde auto</MpAutosaveEvery>
@@ -78,6 +95,7 @@
   <MpHostButton>Héberger</MpHostButton>
   <MpWatchReplay>Regarder</MpWatchReplay>
   <MpNothingSelected>Rien de sélectionné</MpNothingSelected>
+  <MpNoSaves>Le multijoueur ne peut être joué qu'à partir de sauvegardes déjà existantes</MpNoSaves>
   
   <MpHostIngame>Héberger depuis cette partie</MpHostIngame>
   <MpHostReplay>Héberger depuis un replay</MpHostReplay>
@@ -88,7 +106,7 @@
   <MpLanSearching>Recherche</MpLanSearching>
   
   <MpNotConnectedToSteam>Pas connecté(e) à Steam</MpNotConnectedToSteam>
-  <MpNoFriendsPlaying>Aucun ami ne joue actuellement à RimWorld</MpNoFriendsPlaying>
+  <MpNoFriendsPlaying>Aucun ami(e) ne joue actuellement à RimWorld</MpNoFriendsPlaying>
   <MpPlayingRimWorld>Entrain de jouer à RimWorld</MpPlayingRimWorld>
   <MpNotInMultiplayer>Pas dans le Multijoueur</MpNotInMultiplayer>
   
@@ -100,7 +118,9 @@
   <MpMultiplayer>Multijoueur</MpMultiplayer>
   <MpSingleplayer>Solo</MpSingleplayer>
   
- <MpNotAvailable>Non disponible en multijoueur.</MpNotAvailable>
- <MpCallingFactionNotAvailable>Appeler d'autres factions est actuellement impossible en Multijoueur.</MpCallingFactionNotAvailable>
+  <MpNotAvailable>Non disponible en multijoueur.</MpNotAvailable>
+  <MpCallingFactionNotAvailable>Appeler d'autres factions est actuellement impossible en Multijoueur.</MpCallingFactionNotAvailable>
   
+  <MpAggressiveTicking>Système de mesure du temps (tick) agressif</MpAggressiveTicking>
+  <MpAggressiveTickingDesc>Essayez toujours de rattraper automatiquement le serveur au prix de FPS.</MpAggressiveTickingDesc>
 </LanguageData>
