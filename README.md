@@ -1,3 +1,6 @@
+This repo is archived.  
+**Continued at https://github.com/rwmt/Multiplayer**
+
 # Multiplayer
 Multiplayer mod for RimWorld
 
